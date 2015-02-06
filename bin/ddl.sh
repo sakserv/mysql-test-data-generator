@@ -10,6 +10,10 @@ MYSQL_PASS=horton
 MYSQL_DATABASE=mypipe
 MYSQL_TABLE=testing
 
+# Grant access from anywhere for MYSQL_USER
+echo -e "\n### Adding grant to allow user $MYSQL_USER to connect from anywhere"
+mysql --host "127.0.0.1" -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASS -Be "GRANT ALL PRIVILEGES ON *.* TO ''$MYSQL_USER''@'%';"
+
 # Create the mypipe database
 echo -e "\n###  Creating the mypipe database"
 mysql --host "127.0.0.1" -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASS -Be "CREATE DATABASE $MYSQL_DATABASE;"
