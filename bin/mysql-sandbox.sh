@@ -39,10 +39,7 @@ yum install mysql -y
 # Start the sandbox
 echo -e "\n### Starting the mysql-sandbox on port $MYSQL_PORT"
 export SANDBOX_AS_ROOT=1
-make_sandbox $BUILD_DIR/mysql-* -- --no_confirm --db_user=$MYSQL_USER \ 
-    --db_password=$MYSQL_PASS --sandbox_port=$MYSQL_PORT --master \
-    --my_clause=server-id=$MYSQL_PORT --my_clause=log-bin=mysql-bin --my_clause=log-error=msandbox.err \
-    --my_clause=binlog_format=row --my_clause=expire_logs_days=1
+make_sandbox $BUILD_DIR/mysql-* -- --no_confirm --db_user=$MYSQL_USER --db_password=$MYSQL_PASS --sandbox_port=$MYSQL_PORT --master --my_clause=server-id=$MYSQL_PORT --my_clause=log-bin=mysql-bin --my_clause=log-error=msandbox.err --my_clause=binlog_format=row --my_clause=expire_logs_days=1
 
 # Run the ddl script
 bash $SCRIPT_PATH/ddl.sh $MYSQL_PORT
