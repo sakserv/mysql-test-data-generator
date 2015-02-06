@@ -33,8 +33,8 @@ cd $BUILD_DIR/MySQL-Sandbox-* && make test
 cd $BUILD_DIR/MySQL-Sandbox-* && make install
 
 # Install mysql client tools
-echo -e "\n### Installing mysql for the client tools"
-yum install mysql -y
+echo -e "\n### Installing mysql and gzip for the client tools"
+yum install mysql gzip -y
 
 # Start the sandbox
 echo -e "\n### Starting the mysql-sandbox on port $MYSQL_PORT"
