@@ -25,3 +25,7 @@ dt TIMESTAMP);"
 # Display tables
 echo -e "\n###  Showing created tables"
 mysql --host "127.0.0.1" -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASS -D $MYSQL_DATABASE -Be "SHOW TABLES;"
+
+# Validate replication is enabled
+echo -e "\n### Displaying master replication status"
+mysql --host "127.0.0.1" -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASS -D $MYSQL_DATABASE -Be "SHOW MASTER STATUS;"
