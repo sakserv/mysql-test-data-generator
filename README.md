@@ -13,7 +13,7 @@ The following outlines how to use this project.
 cd /tmp && git clone https://github.com/sakserv/mysql-test-data-generator.git
 ```
 
-* Setup mysql-sandbox
+* Setup mysql-sandbox and create the test database/table
 ```
 cd /tmp/mysql-test-data-generator && bash -x bin/mysql-sandbox.sh
 ```

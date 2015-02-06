@@ -21,3 +21,7 @@ lastname VARCHAR(30) NOT NULL,
 subject VARCHAR(20) NOT NULL,
 score INT(3), 
 dt TIMESTAMP);"
+
+# Display tables
+echo -e "\n###  Showing created tables"
+mysql --host "127.0.0.1" -P $MYSQL_PORT -u $MYSQL_USER -p$MYSQL_PASS -D $MYSQL_DATABASE -Be "SHOW TABLES;"
