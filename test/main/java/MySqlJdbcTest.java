@@ -12,13 +12,37 @@
  *  limitations under the License.
  */
 
-import com.github.sakserv.mysqlgenerator.MySqlGenerator;
+import com.github.sakserv.config.ConfigVars;
+import com.github.sakserv.config.PropertyParser;
+import com.github.sakserv.mysql.MySqlGenerator;
+import com.github.sakserv.mysql.Table;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class MySqlJdbcTest {
+
+    // Logger
+    private static final Logger LOG = LoggerFactory.getLogger(MySqlGenerator.class);
+
+    // Setup the property parser
+    private static PropertyParser propertyParser;
+    static {
+        try {
+            propertyParser = new PropertyParser(ConfigVars.DEFAULT_PROPS_FILE);
+        } catch(IOException e) {
+            LOG.error("Unable to load property file: " + propertyParser.getProperty(ConfigVars.DEFAULT_PROPS_FILE));
+        }
+    }
     
     @Test
     public void testMySqlJdbcDriver() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
@@ -33,5 +57,17 @@ public class MySqlJdbcTest {
         mySqlGenerator.loadMysqlJdbcDriver();
         Connection conn = mySqlGenerator.getConnection();
         conn.close();
+    }
+    
+    @Test
+    public void testTables() throws ClassNotFoundException, InstantiationException,
+            IllegalAccessException, SQLException {
+        MySqlGenerator mySqlGenerator = new MySqlGenerator();
+        mySqlGenerator.loadMysqlJdbcDriver();
+        Connection conn = mySqlGenerator.getConnection();
+        List<Table> tables = mySqlGenerator.getTableList(conn);
+        assertEquals(tables.size(), 1);
+        assertThat(tables.get(0).getTableName(), 
+                containsString(propertyParser.getProperty(ConfigVars.MYSQL_TABLE_VAR)));
     }
 }
