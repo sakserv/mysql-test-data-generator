@@ -12,6 +12,7 @@
         <slf4j.version>1.7.10</slf4j.version>
         <junit.version>4.11</junit.version>
         <mysql-connector-java.version>5.1.34</mysql-connector-java.version>
+        <commons-lang3.version>3.3.2</commons-lang3.version>
     </properties>
 
     <repositories>
@@ -48,6 +49,11 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
     </dependencies>
 

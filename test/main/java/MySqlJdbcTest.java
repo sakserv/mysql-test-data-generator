@@ -16,6 +16,7 @@ import com.github.sakserv.config.ConfigVars;
 import com.github.sakserv.config.PropertyParser;
 import com.github.sakserv.mysql.MySqlGenerator;
 import com.github.sakserv.mysql.Table;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,8 @@ public class MySqlJdbcTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(MySqlGenerator.class);
 
+    private static MySqlGenerator mySqlGenerator;
+
     // Setup the property parser
     private static PropertyParser propertyParser;
     static {
@@ -44,6 +47,12 @@ public class MySqlJdbcTest {
         }
     }
     
+    @BeforeClass
+    public static void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        mySqlGenerator = new MySqlGenerator();
+        mySqlGenerator.loadMysqlJdbcDriver();
+    }
+    
     @Test
     public void testMySqlJdbcDriver() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         MySqlGenerator mySqlGenerator = new MySqlGenerator();
@@ -51,23 +60,31 @@ public class MySqlJdbcTest {
     }
     
     @Test
-    public void testMySqlJdbcConnection() throws ClassNotFoundException, InstantiationException, 
-            IllegalAccessException, SQLException {
-        MySqlGenerator mySqlGenerator = new MySqlGenerator();
-        mySqlGenerator.loadMysqlJdbcDriver();
+    public void testMySqlJdbcConnection() throws SQLException {
         Connection conn = mySqlGenerator.getConnection();
         conn.close();
     }
     
     @Test
-    public void testTables() throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException, SQLException {
-        MySqlGenerator mySqlGenerator = new MySqlGenerator();
-        mySqlGenerator.loadMysqlJdbcDriver();
+    public void testTables() throws SQLException {
         Connection conn = mySqlGenerator.getConnection();
         List<Table> tables = mySqlGenerator.getTableList(conn);
         assertEquals(tables.size(), 1);
         assertThat(tables.get(0).getTableName(), 
                 containsString(propertyParser.getProperty(ConfigVars.MYSQL_TABLE_VAR)));
+    }
+    
+    @Test
+    public void testGenerateFirstName() throws IOException {
+        LOG.info("FIRST NAME: " + mySqlGenerator.generateFirstName());
+    }
+    
+    @Test
+    public void testGetRow() throws IOException {
+        int i = 0;
+        while(i < 10) {
+            LOG.info("ROW: " + mySqlGenerator.generateRow().toString());
+            i++;
+        }
     }
 }

@@ -11,25 +11,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-package com.github.sakserv.datetime;
+package com.github.sakserv.datagenerator;
 
 import java.util.GregorianCalendar;
 
-public class GenerateRandomDay {
+public class StringDateRandomValue implements RandomValue<String>{
 
-    public static String genRandomDay() {
+    @Override
+    public String getRandomValue() {
 
         GregorianCalendar gc = new GregorianCalendar();
-
         int year = randBetween(2013, 2014);
-
         gc.set(gc.YEAR, year);
-
         int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
-
         gc.set(gc.DAY_OF_YEAR, dayOfYear);
-
         return String.format("%04d-%02d-%02d", gc.get(gc.YEAR), gc.get(gc.MONTH), gc.get(gc.DAY_OF_MONTH));
 
     }

@@ -17,3 +17,9 @@ cd /tmp && git clone https://github.com/sakserv/mysql-test-data-generator.git
 ```
 cd /tmp/mysql-test-data-generator && bash -x bin/mysql-sandbox.sh
 ```
+
+Test Data Attribution
+---------------------
+First Names - Source: deron.meranda.us/data/
+Last Names - Source: deron.meranda.us/data/
+School Subjects - Source: simple.wikipedia.org/wiki/Subject_(school)
