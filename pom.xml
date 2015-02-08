@@ -13,6 +13,7 @@
         <junit.version>4.11</junit.version>
         <mysql-connector-java.version>5.1.34</mysql-connector-java.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
+        <commons-cli.version>1.2</commons-cli.version>
     </properties>
 
     <repositories>
@@ -54,6 +55,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>${commons-cli.version}</version>
         </dependency>
     </dependencies>
 

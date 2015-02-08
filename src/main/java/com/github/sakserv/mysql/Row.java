@@ -64,11 +64,28 @@ public class Row {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("id: " + getId() + " | ");
-        sb.append("firstname: " + getFirstName() + " | ");
-        sb.append("lastname: " + getLastName() + " | ");
-        sb.append("subject: " + getSubject() + " | ");
-        sb.append("dt: " + getDate());
+        
+        // Id
+        if(getId() != null) {
+            sb.append(getId());
+            sb.append(",");
+        }
+        
+        // First name
+        sb.append(getFirstName());
+        sb.append(",");
+
+        // Last name
+        sb.append(getLastName());
+        sb.append(",");
+
+        // Subject
+        sb.append(getSubject());
+        sb.append(",");
+
+        // Date
+        sb.append(getDate());
+
         return sb.toString();
     }
 }

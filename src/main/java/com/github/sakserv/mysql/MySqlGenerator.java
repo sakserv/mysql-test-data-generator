@@ -17,6 +17,7 @@ import com.github.sakserv.config.ConfigVars;
 import com.github.sakserv.config.PropertyParser;
 import com.github.sakserv.datagenerator.StringDateRandomValue;
 import com.github.sakserv.datagenerator.StringFileBasedRandomValue;
+import org.apache.commons.cli.*;
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,14 +39,7 @@ public class MySqlGenerator {
     private String schoolSubjectFile = "school-subjects.txt";
 
     // Setup the property parser
-    private static PropertyParser propertyParser;
-    static {
-        try {
-            propertyParser = new PropertyParser(ConfigVars.DEFAULT_PROPS_FILE);
-        } catch(IOException e) {
-            LOG.error("Unable to load property file: " + propertyParser.getProperty(ConfigVars.DEFAULT_PROPS_FILE));
-        }
-    }
+    private static PropertyParser propertyParser = new PropertyParser();
     
     public void loadMysqlJdbcDriver() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         // Load the Hive JDBC driver
@@ -54,6 +48,7 @@ public class MySqlGenerator {
     }
     
     public Connection getConnection() throws SQLException {
+        propertyParser.configurePropertyParser();
         Connection connection = DriverManager.getConnection(
                 propertyParser.getProperty(ConfigVars.MYSQL_CONNECTION_STRING_PREFIX_VAR) + 
                         propertyParser.getProperty(ConfigVars.MYSQL_HOSTNAME_VAR) + ":" +
@@ -80,8 +75,11 @@ public class MySqlGenerator {
     }
     
     public Row generateRow() throws IOException {
+        propertyParser.configurePropertyParser();
         Row row = new Row();
-        row.setId(generateId());
+        if(!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.MYSQL_AUTO_INCREMENT_ID_VAR))) {
+            row.setId(generateId());
+        }
         row.setFirstName(generateFirstName());
         row.setLastName(generateLastName());
         row.setSubject(generateSchoolSubject());
@@ -119,6 +117,19 @@ public class MySqlGenerator {
     public String generateDate() {
         StringDateRandomValue stringDateRandomValue = new StringDateRandomValue();
         return stringDateRandomValue.getRandomValue();
+    }
+    
+    public static void main(String[] args) throws ParseException {
+        Options options = new Options();
+        options.addOption("c", true, "configuration file");
+
+        CommandLineParser parser = new BasicParser();
+        CommandLine cmd = parser.parse(options, args);
+        
+        if(cmd.hasOption("c")) {
+            propertyParser.setPropFileName(cmd.getOptionValue("c"));
+        }
+        
     }
     
 }

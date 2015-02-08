@@ -26,4 +26,6 @@ public class ConfigVars {
     public static final String MYSQL_DATABASE_VAR = "mysql.database";
     public static final String MYSQL_TABLE_VAR = "mysql.table";
     public static final String MYSQL_CONNECTION_STRING_PREFIX_VAR = "mysql.connection.string.prefix";
+    public static final String MYSQL_NUM_ROWS_VAR = "mysql.num.rows";
+    public static final String MYSQL_AUTO_INCREMENT_ID_VAR = "mysql.auto.increment.id";
 }

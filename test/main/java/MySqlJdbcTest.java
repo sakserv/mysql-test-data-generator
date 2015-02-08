@@ -38,17 +38,11 @@ public class MySqlJdbcTest {
     private static MySqlGenerator mySqlGenerator;
 
     // Setup the property parser
-    private static PropertyParser propertyParser;
-    static {
-        try {
-            propertyParser = new PropertyParser(ConfigVars.DEFAULT_PROPS_FILE);
-        } catch(IOException e) {
-            LOG.error("Unable to load property file: " + propertyParser.getProperty(ConfigVars.DEFAULT_PROPS_FILE));
-        }
-    }
+    private static PropertyParser propertyParser = new PropertyParser();
     
     @BeforeClass
     public static void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        propertyParser.configurePropertyParser();
         mySqlGenerator = new MySqlGenerator();
         mySqlGenerator.loadMysqlJdbcDriver();
     }
@@ -80,11 +74,11 @@ public class MySqlJdbcTest {
     }
     
     @Test
-    public void testGetRow() throws IOException {
-        int i = 0;
-        while(i < 10) {
+    public void testGenerateRows() throws IOException {
+        propertyParser.configurePropertyParser();
+        Integer rowCount = Integer.parseInt(propertyParser.getProperty(ConfigVars.MYSQL_NUM_ROWS_VAR));
+        for(int i = 0; i < rowCount; i++ ) {
             LOG.info("ROW: " + mySqlGenerator.generateRow().toString());
-            i++;
         }
     }
 }
