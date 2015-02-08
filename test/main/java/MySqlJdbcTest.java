@@ -14,6 +14,7 @@
 
 import com.github.sakserv.config.ConfigVars;
 import com.github.sakserv.config.PropertyParser;
+import com.github.sakserv.minicluster.impl.HsqldbLocalServer;
 import com.github.sakserv.mysql.MySqlGenerator;
 import com.github.sakserv.mysql.Table;
 import org.junit.BeforeClass;
@@ -36,6 +37,7 @@ public class MySqlJdbcTest {
     private static final Logger LOG = LoggerFactory.getLogger(MySqlGenerator.class);
 
     private static MySqlGenerator mySqlGenerator;
+    HsqldbLocalServer hsqldbLocalServer;
 
     // Setup the property parser
     private static PropertyParser propertyParser = new PropertyParser();
