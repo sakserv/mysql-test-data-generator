@@ -14,9 +14,10 @@
 
 import com.github.sakserv.config.ConfigVars;
 import com.github.sakserv.config.PropertyParser;
+import com.github.sakserv.jdbc.JdbcGenerator;
+import com.github.sakserv.jdbc.Table;
 import com.github.sakserv.minicluster.impl.HsqldbLocalServer;
-import com.github.sakserv.mysql.MySqlGenerator;
-import com.github.sakserv.mysql.Table;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -25,62 +26,116 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class MySqlJdbcTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(MySqlGenerator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MySqlJdbcTest.class);
 
-    private static MySqlGenerator mySqlGenerator;
-    HsqldbLocalServer hsqldbLocalServer;
+    private static JdbcGenerator mysqlJdbcGenerator;
+    private static HsqldbLocalServer hsqldbLocalServer;
+    private static Connection connection;
 
     // Setup the property parser
     private static PropertyParser propertyParser = new PropertyParser();
     
     @BeforeClass
-    public static void setUp() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        propertyParser.configurePropertyParser();
-        mySqlGenerator = new MySqlGenerator();
-        mySqlGenerator.loadMysqlJdbcDriver();
+    public static void setUp() throws ClassNotFoundException, InstantiationException, 
+            IllegalAccessException, SQLException {
+        // Load the propertyFile
+        propertyParser.setPropFileName(ConfigVars.DEFAULT_PROPS_FILE);
+        LOG.info("PROP FILE: " + propertyParser.getPropFileName());
+        
+        // Start the HSQLDB
+        hsqldbLocalServer = new HsqldbLocalServer.Builder()
+                .setHsqldbHostName(propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR))
+                .setHsqldbPort(propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR))
+                .setHsqldbTempDir(propertyParser.getProperty(ConfigVars.JDBC_TEMP_DIR_VAR))
+                .setHsqldbDatabaseName(propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR))
+                .setHsqldbJdbcConnectionStringPrefix(
+                        propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR))
+                .setHsqldbJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_VAR))
+                .setHsqldbCompatibilityMode(propertyParser.getProperty(ConfigVars.JDBC_COMPATIBILITY_MODE_KEY))
+                .build();
+        hsqldbLocalServer.start();
+        
+        mysqlJdbcGenerator = new JdbcGenerator();
+        mysqlJdbcGenerator.loadJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_VAR));
+        
+        connection = mysqlJdbcGenerator.getConnection(
+                propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR),
+                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR),
+                propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR),
+                propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR),
+                propertyParser.getProperty(ConfigVars.JDBC_USER_VAR),
+                propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_VAR)
+        );
+        setCompatibilityMode();
+    }
+    
+    @AfterClass
+    public static void tearDown() throws SQLException {
+        connection.close();
+        hsqldbLocalServer.stop();
     }
     
     @Test
     public void testMySqlJdbcDriver() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        MySqlGenerator mySqlGenerator = new MySqlGenerator();
-        mySqlGenerator.loadMysqlJdbcDriver();
+        mysqlJdbcGenerator = new JdbcGenerator();
+        mysqlJdbcGenerator.loadJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_VAR));
     }
     
     @Test
     public void testMySqlJdbcConnection() throws SQLException {
-        Connection conn = mySqlGenerator.getConnection();
-        conn.close();
+        assertEquals("PUBLIC", connection.getCatalog());
     }
     
     @Test
     public void testTables() throws SQLException {
-        Connection conn = mySqlGenerator.getConnection();
-        List<Table> tables = mySqlGenerator.getTableList(conn);
+        // Create the table
+        Statement statement = connection.createStatement();
+        String sql = "CREATE TABLE " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) + " " +
+                "(id INTEGER NOT NULL AUTO_INCREMENT, " +
+                "firstname VARCHAR(255), " +
+                "lastname VARCHAR(255), " +
+                "subject VARCHAR(255), " + 
+                "score INTEGER, " +
+                "datetime DATETIME, " +
+                "PRIMARY KEY ( id ))";
+        statement.executeQuery(sql);
+        
+        List<Table> tables = mysqlJdbcGenerator.getTableList(connection);
         assertEquals(tables.size(), 1);
-        assertThat(tables.get(0).getTableName(), 
-                containsString(propertyParser.getProperty(ConfigVars.MYSQL_TABLE_VAR)));
+        assertThat(tables.get(0).getTableName().toLowerCase(),
+                containsString(propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR)));
     }
     
     @Test
     public void testGenerateFirstName() throws IOException {
-        LOG.info("FIRST NAME: " + mySqlGenerator.generateFirstName());
+        assertTrue(mysqlJdbcGenerator.generateFirstName(ConfigVars.DATA_FIRST_NAMES_FILE) instanceof String);
     }
     
     @Test
     public void testGenerateRows() throws IOException {
-        propertyParser.configurePropertyParser();
-        Integer rowCount = Integer.parseInt(propertyParser.getProperty(ConfigVars.MYSQL_NUM_ROWS_VAR));
+        Integer rowCount = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR));
         for(int i = 0; i < rowCount; i++ ) {
-            LOG.info("ROW: " + mySqlGenerator.generateRow().toString());
+            LOG.info("ROW: " + mysqlJdbcGenerator.generateRow(
+                    Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_AUTO_INCREMENT_ID_VAR)),
+                    ConfigVars.DATA_FIRST_NAMES_FILE,
+                    ConfigVars.DATA_LAST_NAMES_FILE,
+                    ConfigVars.DATA_SCHOOL_SUBJECTS_FILE).toString());
         }
+    }
+    
+    private static void setCompatibilityMode() throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.executeQuery(hsqldbLocalServer.getHsqldbCompatibilityModeStatement());
     }
 }

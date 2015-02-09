@@ -13,10 +13,6 @@
  */
 package com.github.sakserv.datagenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public interface RandomValue<T> {
 
     T getRandomValue();

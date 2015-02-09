@@ -25,13 +25,6 @@ public class PropertyParser {
 
     private Properties props = new Properties();
     private String propFileName;
-    
-    public void configurePropertyParser() {
-        if(propFileName == null) {
-            this.setPropFileName(ConfigVars.DEFAULT_PROPS_FILE);
-        }
-        parsePropsFile();
-    }
 
     public String getPropFileName() {
         return propFileName;
@@ -39,6 +32,7 @@ public class PropertyParser {
 
     public void setPropFileName(String propFileName) {
         this.propFileName = propFileName;
+        parsePropsFile();
     }
 
     public String getProperty(String key) {
