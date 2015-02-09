@@ -135,7 +135,7 @@
                 <version>2.18</version>
                 <configuration>
                     <forkMode>pertest</forkMode>
-                    <argLine>-Xms4g -Xmx4g -XX:MaxPermSize=1024M</argLine>
+                    <argLine>-Xms512m -Xmx512m -XX:MaxPermSize=128M</argLine>
                     <testFailureIgnore>false</testFailureIgnore>
                     <skip>false</skip>
                 </configuration>
