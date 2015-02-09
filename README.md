@@ -18,6 +18,16 @@ cd /tmp && git clone https://github.com/sakserv/mysql-test-data-generator.git
 cd /tmp/mysql-test-data-generator && bash -x bin/mysql-sandbox.sh
 ```
 
+* Install java and maven (if needed)
+```
+cd /tmp/mysql-test-data-generator && bash -x bin/install_maven.sh
+```
+
+* Build the data genertor project
+```
+cd /tmp/mysql-test-data-generator && mvn clean package
+```
+
 Test Data Attribution
 ---------------------
 First Names - Source: deron.meranda.us/data/
