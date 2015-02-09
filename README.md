@@ -28,6 +28,17 @@ cd /tmp/mysql-test-data-generator && bash -x bin/install_maven_java.sh
 cd /tmp/mysql-test-data-generator && bash -x bin/run_mvn_build.sh
 ```
 
+* Copy and populate the template
+```
+cd /tmp/mysql-test-data-generator && cp ./src/main/resources/sandbox.properties /tmp/
+vi /tmp/sandbox.properties
+```
+
+* Run the Main class to populate the database
+```
+java -jar /tmp/mysql-test-data-generator/target/mysql-test-data-generator-0.0.1-SNAPSHOT.jar -c /tmp/sandbox.properties
+```
+
 Test Data Attribution
 ---------------------
 First Names - Source: deron.meranda.us/data/
