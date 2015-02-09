@@ -56,7 +56,7 @@ public class Main {
             LOG.error("ERROR: Failed to parse commandline args!");
             e.printStackTrace();
         }
-        LOG.info("Loading and parsing the property file" + new File(propertyFileName).getAbsolutePath());
+        LOG.info("Loading and parsing the property file: " + new File(propertyFileName).getAbsolutePath());
         propertyParser.setPropFileName(propertyFileName);
         propertyParser.parsePropsFile();
         
@@ -116,7 +116,7 @@ public class Main {
     }
     
     private static void displayQueryDebug(String sql) {
-        LOG.debug("Running the following statement: " + sql);
+        LOG.info("Running the following statement: " + sql);
     }
     
 }
