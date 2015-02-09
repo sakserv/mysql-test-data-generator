@@ -23,7 +23,7 @@ cd /tmp/mysql-test-data-generator && bash -x bin/mysql_sandbox.sh
 cd /tmp/mysql-test-data-generator && bash -x bin/install_maven_java.sh
 ```
 
-* Build the project (if the previous step was skipped)
+* Build the project
 ```
 cd /tmp/mysql-test-data-generator && bash -x bin/run_mvn_build.sh
 ```

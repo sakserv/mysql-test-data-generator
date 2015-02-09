@@ -4,7 +4,7 @@ JAVA_ROOT=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64
 
 # Install Java
 echo -e "\n#### Installing java-1.7.0-openjdk"
-yum install java-1.7.0-openjdk -y
+yum install java-1.7.0-openjdk java-1.7.0-openjdk-devel -y
 
 # Install Maven
 echo -e "\n#### Installing Maven"
