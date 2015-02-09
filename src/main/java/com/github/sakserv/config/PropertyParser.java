@@ -32,7 +32,6 @@ public class PropertyParser {
 
     public void setPropFileName(String propFileName) {
         this.propFileName = propFileName;
-        parsePropsFile();
     }
 
     public String getProperty(String key) {

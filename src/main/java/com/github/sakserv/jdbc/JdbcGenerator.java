@@ -37,6 +37,14 @@ public class JdbcGenerator {
         LOG.info("JDBC: Loading JDBC Driver: " + jdbcDriverClass);
         Class.forName(jdbcDriverClass).newInstance();
     }
+
+    public Connection getConnectionNoDb(String connectionStringPrefix, String hostName,
+                                    String port, String userName,
+                                    String password) throws SQLException {
+        Connection connection = DriverManager.getConnection(connectionStringPrefix + hostName + ":"
+                + port + "/", userName, password);
+        return connection;
+    }
     
     public Connection getConnection(String connectionStringPrefix, String hostName, 
                                     String port, String databaseName, String userName,

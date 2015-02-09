@@ -51,7 +51,7 @@ public class MySqlJdbcTest {
             IllegalAccessException, SQLException {
         // Load the propertyFile
         propertyParser.setPropFileName(ConfigVars.DEFAULT_PROPS_FILE);
-        LOG.info("PROP FILE: " + propertyParser.getPropFileName());
+        propertyParser.parsePropsFile();
         
         // Start the HSQLDB
         hsqldbLocalServer = new HsqldbLocalServer.Builder()
