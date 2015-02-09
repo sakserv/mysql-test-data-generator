@@ -102,6 +102,7 @@ public class Main {
         }
 
         // Create the database
+        if (!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_SKIP_DATABASE_CREATE_VAR))) {
         try {
             LOG.info("Creating the database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
             Statement statement = connection.createStatement();

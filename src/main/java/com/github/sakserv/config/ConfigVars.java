@@ -36,4 +36,5 @@ public class ConfigVars {
     public static final String JDBC_COMPATIBILITY_MODE_KEY = "jdbc.compatibility.mode";
     public static final String JDBC_NUM_ROWS_VAR = "jdbc.num.rows";
     public static final String JDBC_AUTO_INCREMENT_ID_VAR = "jdbc.auto.increment.id";
+    public static final String JDBC_SKIP_DATABASE_CREATE_VAR = "jdbc.skip.database.create";
 }
