@@ -109,10 +109,10 @@ public class Driver {
             displayQueryDebug(sqlCreateDatabase);
             statement.executeQuery(sqlCreateDatabase);
         } catch(SQLException e) {
-            LOG.error("ERROR: Failed to create database: " propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
+            LOG.error("ERROR: Failed to create database: " +  propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
             e.printStackTrace();
         }
-        
+
     }
     
     private static void displayQueryDebug(String sql) {
