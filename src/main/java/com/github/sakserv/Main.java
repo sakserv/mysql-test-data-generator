@@ -124,7 +124,7 @@ public class Main {
     }
     
     private static void displayQueryDebug(String sql) {
-        LOG.info("Running the following statement: " + sql);
+        LOG.info("DEBUG: Running the following statement: " + sql);
     }
     
 }
