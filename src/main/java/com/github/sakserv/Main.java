@@ -119,7 +119,7 @@ public class Main {
         LOG.info("SUCCESS: Successfully populated table " + 
                 propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR) +
                 "." + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) + 
-                " with " propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR) + " records."
+                " with " + propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR) + " records."
         );
     }
     
