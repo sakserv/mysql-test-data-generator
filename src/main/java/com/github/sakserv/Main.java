@@ -25,12 +25,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Driver {
+public class Main {
     
     private static PropertyParser propertyParser = new PropertyParser();
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(Driver.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
     
     private static JdbcGenerator jdbcGenerator = new JdbcGenerator();
 
