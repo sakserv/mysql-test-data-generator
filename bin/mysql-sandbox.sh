@@ -42,4 +42,4 @@ export SANDBOX_AS_ROOT=1
 make_sandbox $BUILD_DIR/mysql-* -- --bind_address=0.0.0.0 --no_confirm --db_user=$MYSQL_USER --db_password=$MYSQL_PASS --sandbox_port=$MYSQL_PORT --master --my_clause=binlog_format=row --my_clause=expire_logs_days=1
 
 # Run the ddl script
-bash $SCRIPT_PATH/ddl.sh $MYSQL_PORT
+#bash $SCRIPT_PATH/ddl.sh $MYSQL_PORT
