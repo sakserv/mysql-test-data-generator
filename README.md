@@ -15,17 +15,17 @@ cd /tmp && git clone https://github.com/sakserv/mysql-test-data-generator.git
 
 * Setup mysql-sandbox and create the test database/table
 ```
-cd /tmp/mysql-test-data-generator && bash -x bin/mysql-sandbox.sh
+cd /tmp/mysql-test-data-generator && bash -x bin/mysql_sandbox.sh
 ```
 
-* Install java and maven (if needed)
+* Install java 1.7 and maven 3.2 (optional if java 1.7 and maven 3.2 are installed)
 ```
-cd /tmp/mysql-test-data-generator && bash -x bin/install_maven.sh
+cd /tmp/mysql-test-data-generator && bash -x bin/install_maven_java.sh
 ```
 
-* Build the data genertor project
+* Build the project (if the previous step was skipped)
 ```
-cd /tmp/mysql-test-data-generator && mvn clean package
+cd /tmp/mysql-test-data-generator && bash -x bin/run_mvn_build.sh
 ```
 
 Test Data Attribution
