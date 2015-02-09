@@ -32,7 +32,8 @@ public class JdbcGenerator {
     // Instance variables
     private Integer rowId = 0;
     
-    public void loadJdbcDriver(String jdbcDriverClass) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void loadJdbcDriver(String jdbcDriverClass) throws ClassNotFoundException, 
+            InstantiationException, IllegalAccessException {
         LOG.info("JDBC: Loading JDBC Driver: " + jdbcDriverClass);
         Class.forName(jdbcDriverClass).newInstance();
     }
