@@ -230,9 +230,13 @@ public class Main {
     }
     
     private static void populateTable(Connection connection) {
+        Integer totalRows = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR);
+        Integer batchSize = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_BATCH_SIZE_VAR);
+        
+        // Populate the table
         try {
             LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
-            for(int i=0; i<Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR)); i++){
+            for(int i=0; i<totalRows; i++){
                 Statement statement = connection.createStatement();
                 String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
                         " (firstname, lastname, subject, score, date) VALUES ( " +
@@ -242,7 +246,13 @@ public class Main {
                                 ConfigVars.DATA_SCHOOL_SUBJECTS_FILE)
                         + " )";
                 displayQueryDebug(sql);
-                statement.executeUpdate(sql);
+                statement.addBatch(sql);
+                
+                // Commit the batch
+                if (i == totalRows || i % batchSize == 0) {
+                    LOG.info("Committing batch of " + batchSize + " rows");
+                    statement.executeBatch();
+                }
             }
         } catch (SQLException e) {
             LOG.error("ERROR: Failed to write row to : " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
