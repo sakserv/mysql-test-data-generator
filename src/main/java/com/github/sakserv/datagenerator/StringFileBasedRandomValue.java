@@ -51,7 +51,7 @@ public class StringFileBasedRandomValue implements RandomValue<String> {
     }
     
     public String getRandomValue() {
-        return fileContents.get(random.nextInt(fileContents.size()));
+        return "'" + fileContents.get(random.nextInt(fileContents.size())) + "'";
     }
     
     
