@@ -236,7 +236,7 @@ public class Main {
         // Populate the table
         try {
             LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
-            for(int i=0; i<totalRows; i++){
+            for(Integer i=0; i<totalRows; i++){
                 Statement statement = connection.createStatement();
                 String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
                         " (firstname, lastname, subject, score, date) VALUES ( " +
@@ -246,11 +246,11 @@ public class Main {
                                 ConfigVars.DATA_SCHOOL_SUBJECTS_FILE)
                         + " )";
                 displayQueryDebug(sql);
-                LOG.info("Adding entry to batch");
+                LOG.info("Adding entry to batch: (i % batchSize) == " + (i % batchSize));
                 statement.addBatch(sql);
                 
                 // Commit the batch
-                if (i == totalRows || i % batchSize == 0) {
+                if (i.equals(totalRows) || (i % batchSize) == 0) {
                     LOG.info("Committing batch of " + batchSize + " rows");
                     statement.executeBatch();
                 }
