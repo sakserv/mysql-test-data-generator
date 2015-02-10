@@ -245,13 +245,14 @@ public class Main {
                                 ConfigVars.DATA_LAST_NAMES_FILE,
                                 ConfigVars.DATA_SCHOOL_SUBJECTS_FILE)
                         + " )";
-                displayQueryDebug(sql);
+                //displayQueryDebug(sql);
                 statement.addBatch(sql);
                 
                 // Commit the batch
                 if (i.equals(totalRows - 1) || (i % batchSize) == 0) {
                     LOG.info("Committing batch of " + batchSize + " rows");
                     statement.executeBatch();
+                    LOG.info("Inserted " + i + " rows...");
                 }
             }
         } catch (SQLException e) {
