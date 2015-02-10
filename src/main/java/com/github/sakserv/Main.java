@@ -163,11 +163,11 @@ public class Main {
             LOG.info("Running grants for user " + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR) +
                     " on " + getNoDbConnString());
             Statement statement = connection.createStatement();
-            String sqlGrant = "GRANT ALL PRIVILEGES ON *.* TO " +
+            String sql = "GRANT ALL PRIVILEGES ON *.* TO " +
                     "\"" + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR) + "\"@" +
                     "\"%\" IDENTIFIED BY \"" + propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_VAR) + "\"";
-            displayQueryDebug(sqlGrant);
-            statement.executeQuery(sqlGrant);
+            displayQueryDebug(sql);
+            statement.executeQuery(sql);
 
             statement = connection.createStatement();
             String sqlFlushPriv = "FLUSH PRIVILEGES";
@@ -187,9 +187,9 @@ public class Main {
             try {
                 LOG.info("Creating the database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
                 Statement statement = connection.createStatement();
-                String sqlCreateDatabase = "CREATE DATABASE " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR);
-                displayQueryDebug(sqlCreateDatabase);
-                statement.executeUpdate(sqlCreateDatabase);
+                String sql = "CREATE DATABASE " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR);
+                displayQueryDebug(sql);
+                statement.executeUpdate(sql);
             } catch (SQLException e) {
                 LOG.error("ERROR: Failed to create database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
                 e.printStackTrace();
@@ -210,6 +210,7 @@ public class Main {
                     "score INTEGER, " +
                     "datetime DATETIME, " +
                     "PRIMARY KEY ( id ))";
+            displayQueryDebug(sql);
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             LOG.error("ERROR: Failed to create table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
@@ -233,11 +234,13 @@ public class Main {
             LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
             Statement statement = connection.createStatement();
             String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
-                    " (firstname, lastname, subject, score, datetime) VALUES " +
+                    " (firstname, lastname, subject, score, datetime) VALUES ( " +
                     jdbcGenerator.generateRow(true,
                             ConfigVars.DATA_FIRST_NAMES_FILE,
                             ConfigVars.DATA_LAST_NAMES_FILE,
-                            ConfigVars.DATA_SCHOOL_SUBJECTS_FILE);
+                            ConfigVars.DATA_SCHOOL_SUBJECTS_FILE)
+                    + " )";
+            displayQueryDebug(sql);
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             LOG.error("ERROR: Failed to create table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
