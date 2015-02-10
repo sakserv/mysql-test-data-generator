@@ -208,7 +208,7 @@ public class Main {
                     "lastname VARCHAR(255), " +
                     "subject VARCHAR(255), " +
                     "score INTEGER, " +
-                    "datetime DATETIME, " +
+                    "date DATE, " +
                     "PRIMARY KEY ( id ))";
             displayQueryDebug(sql);
             statement.executeUpdate(sql);
@@ -234,7 +234,7 @@ public class Main {
             LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
             Statement statement = connection.createStatement();
             String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
-                    " (firstname, lastname, subject, score, datetime) VALUES ( " +
+                    " (firstname, lastname, subject, score, date) VALUES ( " +
                     jdbcGenerator.generateRow(true,
                             ConfigVars.DATA_FIRST_NAMES_FILE,
                             ConfigVars.DATA_LAST_NAMES_FILE,
