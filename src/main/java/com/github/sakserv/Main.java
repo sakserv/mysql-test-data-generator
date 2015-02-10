@@ -230,8 +230,8 @@ public class Main {
     }
     
     private static void populateTable(Connection connection) {
-        Integer totalRows = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR);
-        Integer batchSize = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_BATCH_SIZE_VAR);
+        Integer totalRows = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR));
+        Integer batchSize = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_BATCH_SIZE_VAR));
         
         // Populate the table
         try {
