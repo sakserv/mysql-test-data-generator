@@ -252,7 +252,8 @@ public class Main {
                 if (!i.equals(0) && (i.equals(totalRows - 1) || (i % batchSize) == 0)) {
                     LOG.info("Committing batch of " + batchSize + " rows");
                     statement.executeBatch();
-                    LOG.info("Inserted " + (i + 1) + " total rows");
+                    int curTotalRows = i + 1;
+                    LOG.info("Inserted " + curTotalRows + " total rows");
                 }
             }
         } catch (SQLException e) {
