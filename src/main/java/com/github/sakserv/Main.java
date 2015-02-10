@@ -243,7 +243,7 @@ public class Main {
             displayQueryDebug(sql);
             statement.executeUpdate(sql);
         } catch (SQLException e) {
-            LOG.error("ERROR: Failed to create table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
+            LOG.error("ERROR: Failed to write row to : " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
             e.printStackTrace();
         } catch (IOException e) {
             LOG.error("ERROR: Could not read test data files");

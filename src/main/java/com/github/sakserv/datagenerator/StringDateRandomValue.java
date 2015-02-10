@@ -28,7 +28,7 @@ public class StringDateRandomValue implements RandomValue<String>{
         gc.set(gc.YEAR, year);
         int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
         gc.set(gc.DAY_OF_YEAR, dayOfYear);
-        return String.format("%04d-%02d-%02d", gc.get(gc.YEAR), gc.get(gc.MONTH), gc.get(gc.DAY_OF_MONTH));
+        return String.format("'%04d-%02d-%02d'", gc.get(gc.YEAR), gc.get(gc.MONTH) + 1, gc.get(gc.DAY_OF_MONTH));
 
     }
 
