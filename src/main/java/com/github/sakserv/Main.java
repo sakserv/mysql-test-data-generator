@@ -184,7 +184,7 @@ public class Main {
                 Statement statement = connection.createStatement();
                 String sqlCreateDatabase = "CREATE DATABASE " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR);
                 displayQueryDebug(sqlCreateDatabase);
-                statement.executeQuery(sqlCreateDatabase);
+                statement.executeUpdate(sqlCreateDatabase);
             } catch (SQLException e) {
                 LOG.error("ERROR: Failed to create database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
                 e.printStackTrace();
@@ -205,7 +205,7 @@ public class Main {
                     "score INTEGER, " +
                     "datetime DATETIME, " +
                     "PRIMARY KEY ( id ))";
-            statement.executeQuery(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             LOG.error("ERROR: Failed to create table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
             e.printStackTrace();
