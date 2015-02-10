@@ -19,6 +19,7 @@ public class Row {
     private String firstName;
     private String lastName;
     private String subject;
+    private Integer score;
     private String date;
 
     public Integer getId() {
@@ -53,6 +54,14 @@ public class Row {
         this.subject = subject;
     }
 
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
     public String getDate() {
         return date;
     }
@@ -81,6 +90,10 @@ public class Row {
 
         // Subject
         sb.append(getSubject());
+        sb.append(",");
+
+        // Score
+        sb.append(getScore());
         sb.append(",");
 
         // Date

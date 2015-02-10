@@ -16,12 +16,15 @@ package com.github.sakserv.datagenerator;
 import java.util.GregorianCalendar;
 
 public class StringDateRandomValue implements RandomValue<String>{
+    
+    Integer startYear = 2014;
+    Integer endYear = 2014;
 
     @Override
     public String getRandomValue() {
 
         GregorianCalendar gc = new GregorianCalendar();
-        int year = randBetween(2013, 2014);
+        int year = randBetween(startYear, endYear);
         gc.set(gc.YEAR, year);
         int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
         gc.set(gc.DAY_OF_YEAR, dayOfYear);

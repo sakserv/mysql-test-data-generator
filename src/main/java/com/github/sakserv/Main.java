@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -57,6 +58,9 @@ public class Main {
         
         // Display success message if we got this far
         logSuccessMessage();
+        
+        // Populate the table
+        
     }
     
     private static void displayQueryDebug(String sql) {
@@ -220,6 +224,27 @@ public class Main {
                         "." + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
                         " with " + propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR) + " records."
         );
+        
+    }
+    
+    private static void populateTable(Connection connection) {
+        try {
+            LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
+            Statement statement = connection.createStatement();
+            String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
+                    " (firstname, lastname, subject, score, datetime) VALUES " +
+                    jdbcGenerator.generateRow(true,
+                            ConfigVars.DATA_FIRST_NAMES_FILE,
+                            ConfigVars.DATA_LAST_NAMES_FILE,
+                            ConfigVars.DATA_SCHOOL_SUBJECTS_FILE);
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            LOG.error("ERROR: Failed to create table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
+            e.printStackTrace();
+        } catch (IOException e) {
+            LOG.error("ERROR: Could not read test data files");
+            e.printStackTrace();
+        }
         
     }
     

@@ -13,6 +13,7 @@
  */
 package com.github.sakserv.jdbc;
 
+import com.github.sakserv.datagenerator.IntegerRandomValue;
 import com.github.sakserv.datagenerator.StringDateRandomValue;
 import com.github.sakserv.datagenerator.StringFileBasedRandomValue;
 import org.apache.commons.lang3.text.WordUtils;
@@ -77,6 +78,7 @@ public class JdbcGenerator {
         row.setFirstName(generateFirstName(firstNameFile));
         row.setLastName(generateLastName(lastNameFile));
         row.setSubject(generateSchoolSubject(schoolSubjectFile));
+        row.setScore(generateScore());
         row.setDate(generateDate());
         return row;
     }
@@ -111,6 +113,12 @@ public class JdbcGenerator {
     public String generateDate() {
         StringDateRandomValue stringDateRandomValue = new StringDateRandomValue();
         return stringDateRandomValue.getRandomValue();
+    }
+    
+    public Integer generateScore() {
+        IntegerRandomValue integerRandomValue = new IntegerRandomValue();
+        return integerRandomValue.getRandomValue();
+        
     }
     
 }
