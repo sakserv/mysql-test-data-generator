@@ -246,6 +246,7 @@ public class Main {
                                 ConfigVars.DATA_SCHOOL_SUBJECTS_FILE)
                         + " )";
                 displayQueryDebug(sql);
+                LOG.info("Adding entry to batch");
                 statement.addBatch(sql);
                 
                 // Commit the batch
