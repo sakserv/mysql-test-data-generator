@@ -65,7 +65,7 @@ public class Main {
     }
     
     private static void displayQueryDebug(String sql) {
-        LOG.info("DEBUG: Running the following statement: " + sql);
+        LOG.info("DEBUG: Running (or batching) the following statement: " + sql);
     }
     
     private static String getNoDbConnString() {
@@ -246,11 +246,10 @@ public class Main {
                                 ConfigVars.DATA_SCHOOL_SUBJECTS_FILE)
                         + " )";
                 displayQueryDebug(sql);
-                LOG.info("Adding entry to batch: (i % batchSize) == " + (i % batchSize));
                 statement.addBatch(sql);
                 
                 // Commit the batch
-                if (i.equals(totalRows) || (i % batchSize) == 0) {
+                if (i.equals(totalRows - 1) || (i % batchSize) == 0) {
                     LOG.info("Committing batch of " + batchSize + " rows");
                     statement.executeBatch();
                 }
