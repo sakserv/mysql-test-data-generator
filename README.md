@@ -36,7 +36,8 @@ vi /tmp/sandbox.properties
 
 * Run the Main class to populate the database
 ```
-java -jar /tmp/mysql-test-data-generator/target/mysql-test-data-generator-0.0.1-SNAPSHOT.jar -c /tmp/sandbox.properties
+cd /tmp/mysql-test-data-generator/target/
+java -jar ./mysql-test-data-generator-0.0.1-SNAPSHOT.jar -c /tmp/sandbox.properties
 ```
 
 Test Data Attribution
