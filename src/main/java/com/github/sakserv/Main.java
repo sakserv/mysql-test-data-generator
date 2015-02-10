@@ -55,11 +55,12 @@ public class Main {
         // Create the table
         // TODO: Make table definitions more abstract
         createTable(connection);
+
+        // Populate the table
+        populateTable(connection);
         
         // Display success message if we got this far
         logSuccessMessage();
-        
-        // Populate the table
         
     }
     
