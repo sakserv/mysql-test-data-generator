@@ -232,16 +232,18 @@ public class Main {
     private static void populateTable(Connection connection) {
         try {
             LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
-            Statement statement = connection.createStatement();
-            String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
-                    " (firstname, lastname, subject, score, date) VALUES ( " +
-                    jdbcGenerator.generateRow(true,
-                            ConfigVars.DATA_FIRST_NAMES_FILE,
-                            ConfigVars.DATA_LAST_NAMES_FILE,
-                            ConfigVars.DATA_SCHOOL_SUBJECTS_FILE)
-                    + " )";
-            displayQueryDebug(sql);
-            statement.executeUpdate(sql);
+            for(int i=0; i<Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR)); i++){
+                Statement statement = connection.createStatement();
+                String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
+                        " (firstname, lastname, subject, score, date) VALUES ( " +
+                        jdbcGenerator.generateRow(true,
+                                ConfigVars.DATA_FIRST_NAMES_FILE,
+                                ConfigVars.DATA_LAST_NAMES_FILE,
+                                ConfigVars.DATA_SCHOOL_SUBJECTS_FILE)
+                        + " )";
+                displayQueryDebug(sql);
+                statement.executeUpdate(sql);
+            }
         } catch (SQLException e) {
             LOG.error("ERROR: Failed to write row to : " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
             e.printStackTrace();
