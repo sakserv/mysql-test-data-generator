@@ -236,8 +236,8 @@ public class Main {
         // Populate the table
         try {
             LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
+            Statement statement = connection.createStatement();
             for(Integer i=1; i<=totalRows; i++){
-                Statement statement = connection.createStatement();
                 String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
                         " (firstname, lastname, subject, score, date) VALUES ( " +
                         jdbcGenerator.generateRow(true,
