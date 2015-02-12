@@ -250,6 +250,10 @@ public class Main {
                 
                 // Commit the batch
                 if (!i.equals(0) && (i.equals(totalRows) || (i % batchSize) == 0)) {
+                    try {
+                        Thread.sleep(Long.parseLong(
+                                propertyParser.getProperty(ConfigVars.JDBC_BATCH_COMMIT_DELAY_VAR)) * 1000);
+                    } catch (InterruptedException e) {}
                     LOG.info("Committing batch of " + batchSize + " rows");
                     statement.executeBatch();
                     LOG.info("Inserted " + i + " total rows");
