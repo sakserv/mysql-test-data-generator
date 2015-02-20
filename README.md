@@ -18,14 +18,14 @@ cd /tmp && git clone https://github.com/sakserv/mysql-test-data-generator.git
 cd /tmp/mysql-test-data-generator && bash -x bin/mysql_sandbox.sh
 ```
 
-* Install java 1.7 and maven 3.2 (optional if java 1.7 and maven 3.2 are installed)
+* Install Java 7 (if not already installed)
 ```
-cd /tmp/mysql-test-data-generator && bash -x bin/install_maven_java.sh
+cd /tmp/mysql-test-data-generator && bash -x bin/install_java.sh
 ```
 
 * Build the project
 ```
-cd /tmp/mysql-test-data-generator && bash -x bin/run_mvn_build.sh
+cd /tmp/mysql-test-data-generator && bash -x bin/build.sh
 ```
 
 * Copy and populate the template
@@ -40,7 +40,7 @@ cd /tmp/mysql-test-data-generator/target/
 java -jar ./mysql-test-data-generator-0.0.1-SNAPSHOT.jar -c /tmp/sandbox.properties
 ```
 
-Test Data Attribution
+Test Data Sources
 ---------------------
 First Names - Source: deron.meranda.us/data/
 
