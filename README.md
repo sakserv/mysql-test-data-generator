@@ -30,7 +30,8 @@ cd /tmp/mysql-test-data-generator && bash -x bin/build.sh
 
 * Copy and populate the template
 ```
-cd /tmp/mysql-test-data-generator && cp ./src/main/resources/sandbox.properties /tmp/
+cd /tmp/mysql-test-data-generator 
+cp ./src/main/resources/sandbox.properties /tmp/foo.properties
 vi /tmp/foo.properties
 ```
 
