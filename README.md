@@ -13,7 +13,7 @@ The following outlines how to use this project.
 cd /tmp && git clone https://github.com/sakserv/mysql-test-data-generator.git
 ```
 
-* Setup mysql-sandbox and create the test database/table
+* Start the mysql-sandbox test mysql instance
 ```
 cd /tmp/mysql-test-data-generator && bash -x bin/mysql_sandbox.sh
 ```
@@ -31,13 +31,13 @@ cd /tmp/mysql-test-data-generator && bash -x bin/build.sh
 * Copy and populate the template
 ```
 cd /tmp/mysql-test-data-generator && cp ./src/main/resources/sandbox.properties /tmp/
-vi /tmp/sandbox.properties
+vi /tmp/foo.properties
 ```
 
 * Run the Main class to populate the database
 ```
 cd /tmp/mysql-test-data-generator/target/
-java -jar ./mysql-test-data-generator-0.0.1-SNAPSHOT.jar -c /tmp/sandbox.properties
+java -jar ./mysql-test-data-generator-0.0.1-SNAPSHOT.jar -c /tmp/foo.properties
 ```
 
 Test Data Sources
