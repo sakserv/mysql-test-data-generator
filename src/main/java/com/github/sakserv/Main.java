@@ -187,7 +187,7 @@ public class Main {
             try {
                 LOG.info("Creating the database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
                 Statement statement = connection.createStatement();
-                String sql = "CREATE DATABASE " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR);
+                String sql = "CREATE DATABASE IF NOT EXISTS" + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR);
                 displayQueryDebug(sql);
                 statement.executeUpdate(sql);
             } catch (SQLException e) {
@@ -202,7 +202,7 @@ public class Main {
         try {
             LOG.info("Creating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
             Statement statement = connection.createStatement();
-            String sql = "CREATE TABLE " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) + " " +
+            String sql = "CREATE TABLE IF NOT EXISTS " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) + " " +
                     "(id INTEGER NOT NULL AUTO_INCREMENT, " +
                     "firstname VARCHAR(255), " +
                     "lastname VARCHAR(255), " +
