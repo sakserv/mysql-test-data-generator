@@ -15,4 +15,4 @@ mvn --version
 
 # Run the build
 echo -e "\n### Running mvn clean package"
-mvn clean package
+cd /tmp/mysql-test-data-generator && mvn clean package
