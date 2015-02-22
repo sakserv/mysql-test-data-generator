@@ -44,7 +44,9 @@ public class Main {
         Connection connection = getConnectionNoDb();
                 
         // Create the grants
-        createGrants(connection);
+        if(!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_SKIP_GRANTS_VAR))) {
+            createGrants(connection);
+        }
 
         // Create the database, if required
         createDatabase(connection);
@@ -158,6 +160,7 @@ public class Main {
     }
     
     private static void createGrants(Connection connection) {
+        
         // Create the grants
         try {
             LOG.info("Running grants for user " + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR) +

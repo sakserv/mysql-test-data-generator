@@ -39,4 +39,5 @@ public class ConfigVars {
     public static final String JDBC_BATCH_COMMIT_DELAY_VAR = "jdbc.batch.commit.delay";
     public static final String JDBC_AUTO_INCREMENT_ID_VAR = "jdbc.auto.increment.id";
     public static final String JDBC_SKIP_DATABASE_CREATE_VAR = "jdbc.skip.database.create";
+    public static final String JDBC_SKIP_GRANTS_VAR = "jdbc.skip.grants";
 }
