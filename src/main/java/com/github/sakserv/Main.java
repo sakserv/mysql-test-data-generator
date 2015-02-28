@@ -172,10 +172,10 @@ public class Main {
             displayQueryDebug(sqlGrantPw);
             statement.executeQuery(sqlGrantPw);
             
-            statement = connection.createStatement();
+            /*statement = connection.createStatement();
             String sqlGrantSandbox = "GRANT ALL ON *.* to root@mysql.sandbox WITH GRANT OPTION";
             displayQueryDebug(sqlGrantSandbox);
-            statement.executeQuery(sqlGrantSandbox);
+            statement.executeQuery(sqlGrantSandbox);*/
 
             statement = connection.createStatement();
             String sqlFlushPriv = "FLUSH PRIVILEGES";
