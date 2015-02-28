@@ -166,11 +166,16 @@ public class Main {
             LOG.info("Running grants for user " + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR) +
                     " on " + getNoDbConnString());
             Statement statement = connection.createStatement();
-            String sql = "GRANT ALL PRIVILEGES ON *.* TO " +
+            String sqlGrantPw = "GRANT ALL PRIVILEGES ON *.* TO " +
                     "\"" + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR) + "\"@" +
                     "\"%\" IDENTIFIED BY \"" + propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_VAR) + "\"";
-            displayQueryDebug(sql);
-            statement.executeQuery(sql);
+            displayQueryDebug(sqlGrantPw);
+            statement.executeQuery(sqlGrantPw);
+            
+            statement = connection.createStatement();
+            String sqlGrantSandbox = "GRANT ALL ON *.* to root@mysql.sandbox WITH GRANT OPTION";
+            displayQueryDebug(sqlGrantSandbox);
+            statement.executeQuery(sqlGrantSandbox);
 
             statement = connection.createStatement();
             String sqlFlushPriv = "FLUSH PRIVILEGES";
