@@ -1,0 +1,17 @@
+{
+  "columns":
+  {
+    "id":
+    {
+      "type": "INTEGER",
+      "qualifiers": "NOT NULL AUTO_INCREMENT"
+    },
+    "firstname":
+    {
+      "type": "VARCHAR(255)"
+    }
+  },
+  "attributes": {
+    "primary_key": "id"
+  }
+}
