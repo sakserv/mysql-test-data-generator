@@ -4,11 +4,14 @@
     "id":
     {
       "type": "INTEGER",
-      "qualifiers": "NOT NULL AUTO_INCREMENT"
+      "qualifiers": "NOT NULL AUTO_INCREMENT",
+      "datagenerator": "com.github.sakserv.datagenerator.IntegerRandomValue"
     },
     "firstname":
     {
-      "type": "VARCHAR(255)"
+      "type": "VARCHAR(255)",
+      "datagenerator": "com.github.sakserv.datagenerator.StringFileBasedRandomValue",
+      "datafile": "first-names.txt"
     }
   },
   "attributes": {
