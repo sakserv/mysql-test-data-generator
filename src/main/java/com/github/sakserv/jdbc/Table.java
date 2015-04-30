@@ -13,9 +13,15 @@
  */
 package com.github.sakserv.jdbc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class Table {
     
     private String tableName;
+    List<Row> rows = new ArrayList<Row>();
+    List<Column> columns = new ArrayList<Column>();
 
     public String getTableName() {
         return tableName;
@@ -23,5 +29,21 @@ public class Table {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public List<Row> getRows() {
+        return rows;
+    }
+
+    public List<Column> getColumns() {
+        return columns;
+    }
+
+    public void addRowToTable(Row row) {
+        rows.add(row);
+    }
+
+    public void addColToTable(Column column) {
+        columns.add(column);
     }
 }

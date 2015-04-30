@@ -13,6 +13,9 @@
  */
 package com.github.sakserv.jdbc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Row {
     
     private Integer id;
@@ -21,6 +24,7 @@ public class Row {
     private String subject;
     private Integer score;
     private String date;
+    private List<Column> columns = new ArrayList<Column>();
 
     public Integer getId() {
         return id;
@@ -69,7 +73,15 @@ public class Row {
     public void setDate(String date) {
         this.date = date;
     }
-    
+
+    public void addColumnToRow(Column column) {
+        columns.add(column);
+    }
+
+    public List<Column> getColumns() {
+        return columns;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

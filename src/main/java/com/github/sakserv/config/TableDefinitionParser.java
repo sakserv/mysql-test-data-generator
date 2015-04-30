@@ -13,6 +13,8 @@
  */
 package com.github.sakserv.config;
 
+import com.github.sakserv.jdbc.Column;
+import com.github.sakserv.jdbc.Table;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -49,25 +51,62 @@ public class TableDefinitionParser {
 
         JSONParser jsonParser = new JSONParser();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(jsonFileName);
-        String fileContents = convertStremToString(inputStream);
+        String fileContents = convertStreamToString(inputStream);
 
         try {
             Object obj = jsonParser.parse(fileContents);
             JSONObject jsonObject = (JSONObject) obj;
 
-            // Build up the SQL for the columns
+            Table table = new Table();
+            table.setTableName(jsonObject.get("tablename").toString());
+
+            //LOG.info("TABLE NAME: " + table.getTableName());
+
+            // Get the columns
             Map<String,Map<String,String>> colNames = (Map<String,Map<String,String>>) jsonObject.get("columns");
             Iterator it = colNames.entrySet().iterator();
-            StringBuilder sb = new StringBuilder();
+
             while(it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
+                Map.Entry pair = (Map.Entry) it.next();
                 String colName = (String) pair.getKey();
-                Map<String, String> values = ((Map<String, Map<String,String>>) jsonObject.get("columns")).get(colName);
+
+                Column column = new Column();
+                column.setName(colName);
+
+                // Get the column properties
+                Map<String, String> values = ((Map<String, Map<String, String>>) jsonObject.get("columns")).get(colName);
+
+                // Handle type
                 String type = (String) values.get("type");
-                String qualifiers = values.get("qualifiers");
-                sb.append(colName + " " + type + " " + qualifiers + ",\n");
+                if (type != "") {
+                    column.setType(type);
+                }
+
+                // Handle qualifiers
+                String qualifiers = (String) values.get("qualifiers");
+                if (qualifiers != "") {
+                    column.setQualifiers(qualifiers);
+                }
+
+                // Handle datagenerator
+                String datagenerator = (String) values.get("datagenerator");
+                if (datagenerator != "") {
+                    column.setDatagenerator(datagenerator);
+                }
+
+                // Handle datafile
+                String datafile = (String) values.get("datafile");
+                if (datafile != "") {
+                    column.setDatafile(datafile);
+                }
+
+                table.addColToTable(column);
+
             }
-            LOG.info(sb.toString());
+
+            for(Column col: table.getColumns()) {
+                LOG.info(col.toString());
+            }
 
         } catch(ParseException e) {
             LOG.error("ERROR: Could not parse JSON file " + jsonFileName);
@@ -76,7 +115,7 @@ public class TableDefinitionParser {
         return "";
     }
 
-    static String convertStremToString(InputStream inputStream) {
+    static String convertStreamToString(InputStream inputStream) {
         Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
         return scanner.hasNext() ? scanner.next() : "";
     }

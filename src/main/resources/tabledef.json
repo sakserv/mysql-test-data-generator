@@ -1,4 +1,5 @@
 {
+  "tablename": "students",
   "columns":
   {
     "id":
