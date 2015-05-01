@@ -22,6 +22,7 @@ public class Table {
     private String tableName;
     List<Row> rows = new ArrayList<Row>();
     List<Column> columns = new ArrayList<Column>();
+    private String primaryKey;
 
     public String getTableName() {
         return tableName;
@@ -37,6 +38,14 @@ public class Table {
 
     public List<Column> getColumns() {
         return columns;
+    }
+
+    public String getPrimaryKey() {
+        return primaryKey;
+    }
+
+    public void setPrimaryKey(String primaryKey) {
+        this.primaryKey = primaryKey;
     }
 
     public void addRowToTable(Row row) {

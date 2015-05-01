@@ -26,7 +26,7 @@ public class TableDefinitionParserTest {
     public void testReadingJsonFileContents() {
         TableDefinitionParser tableDefinitionParser = new TableDefinitionParser();
         tableDefinitionParser.setJsonFileName("tabledef.json");
-        tableDefinitionParser.getCreateTableStatement();
+        tableDefinitionParser.createTableFromJsonString();
     }
 
 }

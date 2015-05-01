@@ -34,6 +34,7 @@ public class TableDefinitionParser {
     private static final Logger LOG = LoggerFactory.getLogger(TableDefinitionParser.class);
 
     private String jsonFileName;
+    private String jsonFileContents;
 
     public String getJsonFileName() {
         return jsonFileName;
@@ -43,7 +44,12 @@ public class TableDefinitionParser {
         this.jsonFileName = jsonFileName;
     }
 
-    public String getCreateTableStatement() {
+    public String getJsonFileContents() {
+        return jsonFileContents;
+    }
+
+
+    public String jsonFileContentsToString() {
         if (jsonFileName == null) {
             LOG.error("ERROR: Must set the json file name");
             throw new IllegalArgumentException("ERROR: Must set the json file name");
@@ -52,15 +58,20 @@ public class TableDefinitionParser {
         JSONParser jsonParser = new JSONParser();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(jsonFileName);
         String fileContents = convertStreamToString(inputStream);
+        return fileContents;
+    }
+
+    public Table createTableFromJsonString() {
+
+        String fileContents = jsonFileContentsToString();
+        Table table = new Table();
 
         try {
+            JSONParser jsonParser = new JSONParser();
             Object obj = jsonParser.parse(fileContents);
             JSONObject jsonObject = (JSONObject) obj;
 
-            Table table = new Table();
-            table.setTableName(jsonObject.get("tablename").toString());
-
-            //LOG.info("TABLE NAME: " + table.getTableName());
+            table.setTableName(jsonObject.get("table_name").toString());
 
             // Get the columns
             Map<String,Map<String,String>> colNames = (Map<String,Map<String,String>>) jsonObject.get("columns");
@@ -89,30 +100,31 @@ public class TableDefinitionParser {
                 }
 
                 // Handle datagenerator
-                String datagenerator = (String) values.get("datagenerator");
+                String datagenerator = (String) values.get("data_generator");
                 if (datagenerator != "") {
                     column.setDatagenerator(datagenerator);
                 }
 
                 // Handle datafile
-                String datafile = (String) values.get("datafile");
+                String datafile = (String) values.get("data_file");
                 if (datafile != "") {
                     column.setDatafile(datafile);
                 }
 
                 table.addColToTable(column);
-
             }
 
-            for(Column col: table.getColumns()) {
-                LOG.info(col.toString());
-            }
+
+            // Get the table attributes
+            Map<String, String> attributes = (Map<String, String>) jsonObject.get("attributes");
+            table.setPrimaryKey(attributes.get("primary_key"));
+            LOG.info("PRIMARY KEY: " + table.getPrimaryKey());
 
         } catch(ParseException e) {
             LOG.error("ERROR: Could not parse JSON file " + jsonFileName);
             e.printStackTrace();
         }
-        return "";
+        return table;
     }
 
     static String convertStreamToString(InputStream inputStream) {
