@@ -12,7 +12,10 @@
  *  limitations under the License.
  */
 
-import com.github.sakserv.config.TableDefinitionParser;
+import com.github.sakserv.config.JsonTableParser;
+import com.github.sakserv.jdbc.Column;
+import com.github.sakserv.jdbc.Table;
+import com.github.sakserv.utils.TableUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +23,15 @@ import org.slf4j.LoggerFactory;
 public class TableDefinitionParserTest {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(TableDefinitionParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TableDefinitionParserTest.class);
+
+    private TableUtils tableUtils = new TableUtils();
 
     @Test
     public void testReadingJsonFileContents() {
-        TableDefinitionParser tableDefinitionParser = new TableDefinitionParser();
-        tableDefinitionParser.setJsonFileName("tabledef.json");
-        tableDefinitionParser.createTableFromJsonString();
+        JsonTableParser jsonTableParser = new JsonTableParser("tabledef.json");
+        Table table = tableUtils.createTableObjFromJsonString(jsonTableParser.getJsonFileContents());
+        LOG.info(table.generateCreateTable());
     }
 
 }

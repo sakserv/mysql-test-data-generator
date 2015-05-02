@@ -55,4 +55,25 @@ public class Table {
     public void addColToTable(Column column) {
         columns.add(column);
     }
+
+    public String generateCreateTable() {
+        StringBuilder sb = new StringBuilder();
+
+        // Create table statement
+        sb.append("CREATE TABLE " + tableName + "\n(");
+
+        // Add columns to create table
+        for(Column column: columns) {
+            sb.append(column.getName() + " " + column.getType());
+            if(column.getQualifiers() != null) {
+                sb.append(" " + column.getQualifiers());
+            }
+            sb.append(",\n");
+        }
+
+        // Add primary key
+        sb.append("PRIMARY KEY (" + primaryKey + "))");
+
+        return sb.toString();
+    }
 }
