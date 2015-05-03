@@ -17,6 +17,9 @@ public class ConfigVars {
     
     // Default properties file
     public static final String DEFAULT_PROPS_FILE = "local.properties";
+
+    // Default Table Definition
+    public static final String DEFAULT_TABLE_DEFINITION = "tabledef.json";
     
     // Data files
     public static final String DATA_FIRST_NAMES_FILE = "first-names.txt";

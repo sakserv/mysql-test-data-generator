@@ -58,8 +58,8 @@ public class Main {
         // TODO: Make table definitions more abstract
         createTable(connection);
 
-        // Populate the table
-        populateTable(connection);
+/*        // Populate the table
+        populateTable(connection);*/
         
         // Display success message if we got this far
         logSuccessMessage();
@@ -237,7 +237,7 @@ public class Main {
         
     }
     
-    private static void populateTable(Connection connection) {
+/*    private static void populateTable(Connection connection) {
         Integer totalRows = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR));
         Integer batchSize = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_BATCH_SIZE_VAR));
         
@@ -275,6 +275,6 @@ public class Main {
             e.printStackTrace();
         }
         
-    }
+    }*/
     
 }

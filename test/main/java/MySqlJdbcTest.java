@@ -13,10 +13,12 @@
  */
 
 import com.github.sakserv.config.ConfigVars;
+import com.github.sakserv.config.JsonTableParser;
 import com.github.sakserv.config.PropertyParser;
 import com.github.sakserv.jdbc.JdbcGenerator;
 import com.github.sakserv.jdbc.Table;
 import com.github.sakserv.minicluster.impl.HsqldbLocalServer;
+import com.github.sakserv.utils.TableUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,6 +45,10 @@ public class MySqlJdbcTest {
 
     // Setup the property parser
     private static PropertyParser propertyParser = new PropertyParser();
+    private static Table table;
+
+    // Table Utils
+    private static TableUtils tableUtils = new TableUtils();
     
     @BeforeClass
     public static void setUp() throws ClassNotFoundException, InstantiationException, 
@@ -76,6 +82,9 @@ public class MySqlJdbcTest {
                 propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_VAR)
         );
         setCompatibilityMode();
+
+        JsonTableParser jsonTableParser = new JsonTableParser(ConfigVars.DEFAULT_TABLE_DEFINITION);
+        table = tableUtils.createTableObjFromJsonString(jsonTableParser.getJsonFileContents());
     }
     
     @AfterClass
@@ -99,14 +108,7 @@ public class MySqlJdbcTest {
     public void testTables() throws SQLException {
         // Create the table
         Statement statement = connection.createStatement();
-        String sql = "CREATE TABLE " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) + " " +
-                "(id INTEGER NOT NULL AUTO_INCREMENT, " +
-                "firstname VARCHAR(255), " +
-                "lastname VARCHAR(255), " +
-                "subject VARCHAR(255), " + 
-                "score INTEGER, " +
-                "datetime DATETIME, " +
-                "PRIMARY KEY ( id ))";
+        String sql = table.generateCreateTable();
         statement.executeQuery(sql);
         
         List<Table> tables = mysqlJdbcGenerator.getTableList(connection);
@@ -115,7 +117,7 @@ public class MySqlJdbcTest {
                 containsString(propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR)));
     }
     
-    @Test
+/*    @Test
     public void testGenerateFirstName() throws IOException {
         assertTrue(mysqlJdbcGenerator.generateFirstName(ConfigVars.DATA_FIRST_NAMES_FILE) instanceof String);
     }
@@ -130,7 +132,7 @@ public class MySqlJdbcTest {
                     ConfigVars.DATA_LAST_NAMES_FILE,
                     ConfigVars.DATA_SCHOOL_SUBJECTS_FILE).toString());
         }
-    }
+    }*/
     
     private static void setCompatibilityMode() throws SQLException {
         Statement statement = connection.createStatement();
