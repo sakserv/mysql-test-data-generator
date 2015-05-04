@@ -118,23 +118,6 @@ public class MySqlJdbcTest {
                 containsString(propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR)));
     }
     
-/*    @Test
-    public void testGenerateFirstName() throws IOException {
-        assertTrue(mysqlJdbcGenerator.generateFirstName(ConfigVars.DATA_FIRST_NAMES_FILE) instanceof String);
-    }
-    
-    @Test
-    public void testGenerateRows() throws IOException {
-        Integer rowCount = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR));
-        for(int i = 0; i < rowCount; i++ ) {
-            LOG.info("ROW: " + mysqlJdbcGenerator.generateRow(
-                    Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_AUTO_INCREMENT_ID_VAR)),
-                    ConfigVars.DATA_FIRST_NAMES_FILE,
-                    ConfigVars.DATA_LAST_NAMES_FILE,
-                    ConfigVars.DATA_SCHOOL_SUBJECTS_FILE).toString());
-        }
-    }*/
-    
     private static void setCompatibilityMode() throws SQLException {
         Statement statement = connection.createStatement();
         statement.executeQuery(hsqldbLocalServer.getHsqldbCompatibilityModeStatement());

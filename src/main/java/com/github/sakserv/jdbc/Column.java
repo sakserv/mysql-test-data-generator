@@ -13,7 +13,19 @@
  */
 package com.github.sakserv.jdbc;
 
+import com.github.sakserv.datagenerator.RandomValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public class Column {
+
+    // Logger
+    private static final Logger LOG = LoggerFactory.getLogger(Column.class);
+
     private String name;
     private String type;
     private String qualifiers;
@@ -58,6 +70,13 @@ public class Column {
 
     public void setDatafile(String datafile) {
         this.datafile = datafile;
+    }
+
+    public String generateValue() throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
+    IllegalAccessException, InvocationTargetException {
+        Constructor constructor = Class.forName(this.getDatagenerator()).getConstructor(new Class[]{Column.class});
+        RandomValue stringFileBasedRandomValue = (RandomValue) constructor.newInstance(this);
+        return stringFileBasedRandomValue.getRandomValue().toString();
     }
 
     public String toString() {

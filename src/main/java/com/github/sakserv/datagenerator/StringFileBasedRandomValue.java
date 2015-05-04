@@ -13,6 +13,8 @@
  */
 package com.github.sakserv.datagenerator;
 
+import com.github.sakserv.jdbc.Column;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,26 +23,22 @@ import java.util.Random;
 public class StringFileBasedRandomValue implements RandomValue<String> {
     
     File file;
-    List<String> fileContents;
     Random random;
+    Column column;
+    List<String> fileContents;
     
-    public  StringFileBasedRandomValue() {
+    public  StringFileBasedRandomValue(Column column) throws IOException {
         random = new Random();
+        this.column = column;
+        file = new File(column.getDatafile());
+        setFileContents();
     }
 
     public File getFile() {
         return file;
     }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
     
-    public void setFileFromString(String fileName) {
-        setFile(new File(fileName).getAbsoluteFile());
-    }
-    
-    public void setFileContents(File file) throws IOException {
+    public void setFileContents() throws IOException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(file.getName());
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         fileContents = new ArrayList<>();

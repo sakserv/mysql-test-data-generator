@@ -13,11 +13,15 @@
  */
 package com.github.sakserv.datagenerator;
 
+import com.github.sakserv.jdbc.Column;
+
 import java.util.Random;
 
 public class IntegerRandomValue implements RandomValue<Integer> {
     Integer upperBound = 100;
     Integer lowerBound = 0;
+
+    public IntegerRandomValue(Column column) {}
 
     public Integer getUpperBound() {
         return upperBound;
