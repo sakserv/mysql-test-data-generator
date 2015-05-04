@@ -18,7 +18,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static org.junit.Assert.*;
+
 public class JsonTableParserTest {
+
+    private String jsonFileName = "tabledef.json";
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -29,5 +33,11 @@ public class JsonTableParserTest {
 
         exception.expect(ParseException.class);
         JsonTableParser.jsonObjectFromJsonString(badJson);
+    }
+
+    @Test
+    public void testJsonFileName() {
+        JsonTableParser jsonTableParser = new JsonTableParser(jsonFileName);
+        assertEquals(jsonFileName, jsonTableParser.getJsonFileName());
     }
 }
