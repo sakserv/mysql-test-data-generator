@@ -11,20 +11,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.sakserv.jdbc;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.github.sakserv.config.JsonTableParser;
+import org.json.simple.parser.ParseException;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-public class Row {
+public class JsonTableParserTest {
 
-    private List<Column> columns = new ArrayList<Column>();
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
-    public void addColumnToRow(Column column) {
-        columns.add(column);
-    }
+    @Test
+    public void testMalformedJson() throws ParseException {
+        String badJson = "{\"name\": }";
 
-    public List<Column> getColumns() {
-        return columns;
+        exception.expect(ParseException.class);
+        JsonTableParser.jsonObjectFromJsonString(badJson);
     }
 }

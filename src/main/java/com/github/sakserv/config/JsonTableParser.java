@@ -48,16 +48,13 @@ public class JsonTableParser {
         return jsonFileContents;
     }
 
-    public static JSONObject jsonObjectFromJsonString(String jsonString) {
+    public static JSONObject jsonObjectFromJsonString(String jsonString) throws ParseException {
         JSONObject jsonObject = new JSONObject();
-        try {
 
-            JSONParser jsonParser = new JSONParser();
-            Object obj = jsonParser.parse(jsonString);
-            jsonObject = (JSONObject) obj;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        JSONParser jsonParser = new JSONParser();
+        Object obj = jsonParser.parse(jsonString);
+        jsonObject = (JSONObject) obj;
+
         return jsonObject;
     }
 

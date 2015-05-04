@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.json.simple.parser.ParseException;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -52,7 +53,7 @@ public class MySqlJdbcTest {
     
     @BeforeClass
     public static void setUp() throws ClassNotFoundException, InstantiationException, 
-            IllegalAccessException, SQLException {
+            IllegalAccessException, SQLException, ParseException {
         // Load the propertyFile
         propertyParser.setPropFileName(ConfigVars.DEFAULT_PROPS_FILE);
         propertyParser.parsePropsFile();

@@ -27,7 +27,7 @@ public class TableUtils {
 
     Map<String, Map<String, String>> columnNames;
 
-    public Table createTableObjFromJsonString(String jsonString) {
+    public Table createTableObjFromJsonString(String jsonString) throws ParseException {
 
         Table table = new Table();
         JSONObject jsonObject = JsonTableParser.jsonObjectFromJsonString(jsonString);

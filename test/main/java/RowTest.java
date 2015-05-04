@@ -11,20 +11,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.sakserv.jdbc;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.github.sakserv.jdbc.Column;
+import com.github.sakserv.jdbc.Row;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class Row {
+public class RowTest {
 
-    private List<Column> columns = new ArrayList<Column>();
+    private Row row = new Row();
 
-    public void addColumnToRow(Column column) {
-        columns.add(column);
+    @Test
+    public void testAddColumn() {
+        Column column = new Column();
+        row.addColumnToRow(column);
+        assertEquals(1, row.getColumns().size());
     }
 
-    public List<Column> getColumns() {
-        return columns;
-    }
 }
