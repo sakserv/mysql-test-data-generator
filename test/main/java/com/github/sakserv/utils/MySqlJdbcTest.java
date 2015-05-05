@@ -1,4 +1,4 @@
-/*
+package com.github.sakserv.utils;/*
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -15,10 +15,8 @@
 import com.github.sakserv.config.ConfigVars;
 import com.github.sakserv.config.JsonTableParser;
 import com.github.sakserv.config.PropertyParser;
-import com.github.sakserv.jdbc.JdbcGenerator;
-import com.github.sakserv.jdbc.Table;
+import com.github.sakserv.db.Table;
 import com.github.sakserv.minicluster.impl.HsqldbLocalServer;
-import com.github.sakserv.utils.TableUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,7 +38,7 @@ public class MySqlJdbcTest {
     // Logger
     private static final Logger LOG = LoggerFactory.getLogger(MySqlJdbcTest.class);
 
-    private static JdbcGenerator mysqlJdbcGenerator;
+    private static JdbcUtils jdbcUtils;
     private static HsqldbLocalServer hsqldbLocalServer;
     private static Connection connection;
 
@@ -53,34 +51,34 @@ public class MySqlJdbcTest {
     
     @BeforeClass
     public static void setUp() throws ClassNotFoundException, InstantiationException, 
-            IllegalAccessException, SQLException, ParseException {
+            IllegalAccessException, SQLException, ParseException, IOException {
         // Load the propertyFile
         propertyParser.setPropFileName(ConfigVars.DEFAULT_PROPS_FILE);
         propertyParser.parsePropsFile();
         
         // Start the HSQLDB
         hsqldbLocalServer = new HsqldbLocalServer.Builder()
-                .setHsqldbHostName(propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR))
-                .setHsqldbPort(propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR))
-                .setHsqldbTempDir(propertyParser.getProperty(ConfigVars.JDBC_TEMP_DIR_VAR))
-                .setHsqldbDatabaseName(propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR))
+                .setHsqldbHostName(propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY))
+                .setHsqldbPort(propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY))
+                .setHsqldbTempDir(propertyParser.getProperty(ConfigVars.JDBC_TEMP_DIR_KEY))
+                .setHsqldbDatabaseName(propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY))
                 .setHsqldbJdbcConnectionStringPrefix(
-                        propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR))
-                .setHsqldbJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_VAR))
+                        propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY))
+                .setHsqldbJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_KEY))
                 .setHsqldbCompatibilityMode(propertyParser.getProperty(ConfigVars.JDBC_COMPATIBILITY_MODE_KEY))
                 .build();
         hsqldbLocalServer.start();
         
-        mysqlJdbcGenerator = new JdbcGenerator();
-        mysqlJdbcGenerator.loadJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_VAR));
+        jdbcUtils = new JdbcUtils();
+        jdbcUtils.loadJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_KEY));
         
-        connection = mysqlJdbcGenerator.getConnection(
-                propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR),
-                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR),
-                propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR),
-                propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR),
-                propertyParser.getProperty(ConfigVars.JDBC_USER_VAR),
-                propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_VAR)
+        connection = jdbcUtils.getConnection(
+                propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_USER_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY)
         );
         setCompatibilityMode();
 
@@ -96,8 +94,8 @@ public class MySqlJdbcTest {
     
     @Test
     public void testMySqlJdbcDriver() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        mysqlJdbcGenerator = new JdbcGenerator();
-        mysqlJdbcGenerator.loadJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_VAR));
+        jdbcUtils = new JdbcUtils();
+        jdbcUtils.loadJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_KEY));
     }
     
     @Test
@@ -112,10 +110,10 @@ public class MySqlJdbcTest {
         String sql = table.generateCreateTable();
         statement.executeQuery(sql);
         
-        List<Table> tables = mysqlJdbcGenerator.getTableList(connection);
+        List<Table> tables = jdbcUtils.getTableList(connection);
         assertEquals(tables.size(), 1);
         assertThat(tables.get(0).getTableName().toLowerCase(),
-                containsString(propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR)));
+                containsString(propertyParser.getProperty(ConfigVars.JDBC_TABLE_KEY)));
     }
     
     private static void setCompatibilityMode() throws SQLException {

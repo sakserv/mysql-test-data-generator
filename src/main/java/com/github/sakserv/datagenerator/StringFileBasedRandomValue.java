@@ -13,7 +13,7 @@
  */
 package com.github.sakserv.datagenerator;
 
-import com.github.sakserv.jdbc.Column;
+import com.github.sakserv.db.Column;
 
 import java.io.*;
 import java.util.ArrayList;

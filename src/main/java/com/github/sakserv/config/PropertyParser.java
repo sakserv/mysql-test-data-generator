@@ -38,24 +38,27 @@ public class PropertyParser {
         return props.get(key).toString();
     }
 
-    public void parsePropsFile() {
+    public void parsePropsFile() throws IOException {
 
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 
         try {
-            if (inputStream != null) {
+            if (null != inputStream) {
                 props.load(inputStream);
             } else {
-                inputStream = new FileInputStream(new File(propFileName).getAbsolutePath());
-                if (inputStream != null) {
-                    props.load(inputStream);
-                } else {
-                    throw new FileNotFoundException("Property file not found in resources directory: " + propFileName);
-                }
+                throw new IOException("Could not load property file from the resources directory, trying local");
             }
         } catch(IOException e) {
-            LOG.error("Failed to load property file: " + propFileName);
+            LOG.error(e.getMessage());
+            e.printStackTrace();
+            try {
+                inputStream = new FileInputStream(new File(propFileName).getAbsolutePath());
+                props.load(inputStream);
+            } catch (IOException ex) {
+                LOG.error("Could not load property file at " + new File(propFileName).getAbsolutePath());
+                ex.printStackTrace();
+                throw ex;
+            }
         }
     }
-
 }

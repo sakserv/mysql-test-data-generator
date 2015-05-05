@@ -1,4 +1,4 @@
-/*
+package com.github.sakserv.config;/*
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -12,7 +12,6 @@
  *  limitations under the License.
  */
 
-import com.github.sakserv.config.JsonTableParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,5 +38,10 @@ public class JsonTableParserTest {
     public void testJsonFileName() {
         JsonTableParser jsonTableParser = new JsonTableParser(jsonFileName);
         assertEquals(jsonFileName, jsonTableParser.getJsonFileName());
+    }
+
+    @Test
+    public void testJsonTableParserConstructor() {
+        JsonTableParser jsonTableParser = new JsonTableParser();
     }
 }

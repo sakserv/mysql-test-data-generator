@@ -1,4 +1,4 @@
-/*
+package com.github.sakserv.config;/*
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -12,8 +12,11 @@
  *  limitations under the License.
  */
 
-import com.github.sakserv.config.PropertyParser;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
@@ -21,11 +24,29 @@ public class PropertyParserTest {
 
     private PropertyParser propertyParser = new PropertyParser();
     private String propFileName = "default.properties";
+    private String badPropFileName = "bad.properties";
+    private String localPropFileName = "test/resources/localonly.properties";
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void testPropertyFileName() {
         propertyParser.setPropFileName(propFileName);
         assertEquals(propFileName, propertyParser.getPropFileName());
+    }
+
+    @Test
+    public void testBadPropFileName() throws IOException {
+        propertyParser.setPropFileName(badPropFileName);
+        exception.expect(IOException.class);
+        propertyParser.parsePropsFile();
+    }
+
+    @Test
+    public void testLocalOnlyPropFileName() throws IOException {
+        propertyParser.setPropFileName(localPropFileName);
+        propertyParser.parsePropsFile();
     }
 
 }

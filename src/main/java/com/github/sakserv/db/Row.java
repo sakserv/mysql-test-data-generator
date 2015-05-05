@@ -11,6 +11,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package com.github.sakserv.db;
 
-public class TableTest {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Row {
+
+    private List<Column> columns = new ArrayList<Column>();
+
+    public void addColumnToRow(Column column) {
+        columns.add(column);
+    }
+
+    public List<Column> getColumns() {
+        return columns;
+    }
 }

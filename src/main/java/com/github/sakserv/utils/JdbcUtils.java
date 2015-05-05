@@ -11,50 +11,43 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.sakserv.jdbc;
+package com.github.sakserv.utils;
 
-import com.github.sakserv.datagenerator.IntegerRandomValue;
-import com.github.sakserv.datagenerator.StringDateRandomValue;
-import com.github.sakserv.datagenerator.StringFileBasedRandomValue;
-import org.apache.commons.lang3.text.WordUtils;
+import com.github.sakserv.db.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcGenerator {
+public class JdbcUtils {
 
     // Logger
-    private static final Logger LOG = LoggerFactory.getLogger(JdbcGenerator.class);
-    
-    // Instance variables
-    private Integer rowId = 0;
-    
-    public void loadJdbcDriver(String jdbcDriverClass) throws ClassNotFoundException, 
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcUtils.class);
+
+    public void loadJdbcDriver(String jdbcDriverClass) throws ClassNotFoundException,
             InstantiationException, IllegalAccessException {
         LOG.info("JDBC: Loading JDBC Driver: " + jdbcDriverClass);
         Class.forName(jdbcDriverClass).newInstance();
     }
 
-    public Connection getConnectionNoDb(String connectionStringPrefix, String hostName,
-                                    String port, String userName,
-                                    String password) throws SQLException {
+    public Connection getConnection(String connectionStringPrefix, String hostName,
+                                        String port, String userName,
+                                        String password) throws SQLException {
         Connection connection = DriverManager.getConnection(connectionStringPrefix + hostName + ":"
                 + port + "/", userName, password);
         return connection;
     }
-    
-    public Connection getConnection(String connectionStringPrefix, String hostName, 
-                                    String port, String databaseName, String userName,
-                                    String password) throws SQLException {
-        Connection connection = DriverManager.getConnection(connectionStringPrefix + hostName + ":" 
-                        + port + "/" + databaseName, userName, password);
+
+    public Connection getConnection(String connectionStringPrefix, String hostName,
+                                    String port, String userName, String password,
+                                    String databaseName) throws SQLException {
+        Connection connection = DriverManager.getConnection(connectionStringPrefix + hostName + ":"
+                + port + "/" + databaseName, userName, password);
         return connection;
     }
-    
+
     public List<Table> getTableList(Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         List<Table> tableList = new ArrayList<Table>();
@@ -66,7 +59,7 @@ public class JdbcGenerator {
             tableList.add(table);
         }
         return tableList;
-        
+
     }
-    
+
 }

@@ -15,12 +15,14 @@ package com.github.sakserv;
 
 import com.github.sakserv.config.ConfigVars;
 import com.github.sakserv.config.PropertyParser;
-import com.github.sakserv.jdbc.JdbcGenerator;
+import com.github.sakserv.utils.JdbcUtils;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOError;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,10 +34,10 @@ public class Main {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private static PropertyParser propertyParser = new PropertyParser();
-    private static JdbcGenerator jdbcGenerator = new JdbcGenerator();
+    private static JdbcUtils jdbcUtils = new JdbcUtils();
     private static Connection connection;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         
         // Parse the cmdline args and property file
         parseCmdLineAndProps(args);
@@ -44,7 +46,7 @@ public class Main {
         Connection connection = getConnectionNoDb();
                 
         // Create the grants
-        if(!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_SKIP_GRANTS_VAR))) {
+        if(!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_SKIP_GRANTS_KEY))) {
             createGrants(connection);
         }
 
@@ -71,16 +73,16 @@ public class Main {
     }
     
     private static String getNoDbConnString() {
-        return propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR) +
-                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR) + ":" +
-                propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR);
+        return propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY) +
+                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY) + ":" +
+                propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY);
     }
     
     private static String getConnString() {
-        return propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR) +
-                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR) + ":" +
-                propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR) + "/" +
-                propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR);
+        return propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY) +
+                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY) + ":" +
+                propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY) + "/" +
+                propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY);
         
     }
     
@@ -90,16 +92,16 @@ public class Main {
         LOG.info("Establishing connection to: " + noDbConnString);
         Connection connection = null;
         try {
-            connection = jdbcGenerator.getConnectionNoDb(
-                    propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_USER_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_VAR)
+            connection = jdbcUtils.getConnection(
+                    propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_USER_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_KEY)
             );
         } catch (SQLException e) {
             LOG.error("ERROR: Failed to connect to database at: " + noDbConnString +
-                    " using username: " + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR));
+                    " using username: " + propertyParser.getProperty(ConfigVars.JDBC_USER_KEY));
             e.printStackTrace();
         }
         return connection;
@@ -108,31 +110,31 @@ public class Main {
     
     private static Connection getConnection() {
         // Establish the connection, with the db
-        String dbConnString = propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR) +
-                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR) + ":" +
-                propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR) + "/" +
-                propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR);
+        String dbConnString = propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY) +
+                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY) + ":" +
+                propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY) + "/" +
+                propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY);
         LOG.info("Establishing connection to: " + getConnString());
         connection = null;
         try {
-            connection = jdbcGenerator.getConnection(
-                    propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_PORT_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_USER_VAR),
-                    propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_VAR)
+            connection = jdbcUtils.getConnection(
+                    propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_USER_KEY),
+                    propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_KEY)
             );
         } catch (SQLException e) {
             LOG.error("ERROR: Failed to connect to database at: " + dbConnString +
-                    " using username: " + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR));
+                    " using username: " + propertyParser.getProperty(ConfigVars.JDBC_USER_KEY));
             e.printStackTrace();
         }
         return connection;
         
     }
     
-    private static void parseCmdLineAndProps(String[] args) {
+    private static void parseCmdLineAndProps(String[] args) throws IOException {
         // Arg parsing for input props file
         Options options = new Options();
         options.addOption("c", true, "configuration file");
@@ -163,12 +165,12 @@ public class Main {
         
         // Create the grants
         try {
-            LOG.info("Running grants for user " + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR) +
+            LOG.info("Running grants for user " + propertyParser.getProperty(ConfigVars.JDBC_USER_KEY) +
                     " on " + getNoDbConnString());
             Statement statement = connection.createStatement();
             String sqlGrantPw = "GRANT ALL PRIVILEGES ON *.* TO " +
-                    "\"" + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR) + "\"@" +
-                    "\"%\" IDENTIFIED BY \"" + propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_VAR) + "\"";
+                    "\"" + propertyParser.getProperty(ConfigVars.JDBC_USER_KEY) + "\"@" +
+                    "\"%\" IDENTIFIED BY \"" + propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_KEY) + "\"";
             displayQueryDebug(sqlGrantPw);
             statement.executeQuery(sqlGrantPw);
             
@@ -183,7 +185,7 @@ public class Main {
             statement.executeQuery(sqlFlushPriv);
 
         } catch (SQLException e) {
-            LOG.error("ERROR: Error applying grants for user: " + propertyParser.getProperty(ConfigVars.JDBC_USER_VAR));
+            LOG.error("ERROR: Error applying grants for user: " + propertyParser.getProperty(ConfigVars.JDBC_USER_KEY));
             e.printStackTrace();
         }
         
@@ -191,15 +193,15 @@ public class Main {
     
     private static void createDatabase(Connection connection) {
         // Create the database
-        if (!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_SKIP_DATABASE_CREATE_VAR))) {
+        if (!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_SKIP_DATABASE_CREATE_KEY))) {
             try {
-                LOG.info("Creating the database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
+                LOG.info("Creating the database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY));
                 Statement statement = connection.createStatement();
-                String sql = "CREATE DATABASE IF NOT EXISTS " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR);
+                String sql = "CREATE DATABASE IF NOT EXISTS " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY);
                 displayQueryDebug(sql);
                 statement.executeUpdate(sql);
             } catch (SQLException e) {
-                LOG.error("ERROR: Failed to create database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR));
+                LOG.error("ERROR: Failed to create database: " + propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY));
                 e.printStackTrace();
             }
         }
@@ -208,9 +210,9 @@ public class Main {
     
     private static void createTable(Connection connection) {
         try {
-            LOG.info("Creating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
+            LOG.info("Creating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_KEY));
             Statement statement = connection.createStatement();
-            String sql = "CREATE TABLE IF NOT EXISTS " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) + " " +
+            String sql = "CREATE TABLE IF NOT EXISTS " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_KEY) + " " +
                     "(id INTEGER NOT NULL AUTO_INCREMENT, " +
                     "firstname VARCHAR(255), " +
                     "lastname VARCHAR(255), " +
@@ -221,7 +223,7 @@ public class Main {
             displayQueryDebug(sql);
             statement.executeUpdate(sql);
         } catch (SQLException e) {
-            LOG.error("ERROR: Failed to create table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
+            LOG.error("ERROR: Failed to create table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_KEY));
             e.printStackTrace();
         }
         
@@ -230,23 +232,23 @@ public class Main {
     private static void logSuccessMessage() {
         // Display success message if we got this far
         LOG.info("SUCCESS: Successfully populated table " +
-                        propertyParser.getProperty(ConfigVars.JDBC_DATABASE_VAR) +
-                        "." + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
-                        " with " + propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR) + " records."
+                        propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY) +
+                        "." + propertyParser.getProperty(ConfigVars.JDBC_TABLE_KEY) +
+                        " with " + propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_KEY) + " records."
         );
         
     }
     
 /*    private static void populateTable(Connection connection) {
-        Integer totalRows = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_VAR));
-        Integer batchSize = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_BATCH_SIZE_VAR));
+        Integer totalRows = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_KEY));
+        Integer batchSize = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_BATCH_SIZE_KEY));
         
         // Populate the table
         try {
-            LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
+            LOG.info("Populating the table: " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_KEY));
             Statement statement = connection.createStatement();
             for(Integer i=1; i<=totalRows; i++){
-                String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR) +
+                String sql = "INSERT INTO " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_KEY) +
                         " (firstname, lastname, subject, score, date) VALUES ( " +
                         jdbcGenerator.generateRow(true,
                                 ConfigVars.DATA_FIRST_NAMES_FILE,
@@ -260,7 +262,7 @@ public class Main {
                 if (!i.equals(0) && (i.equals(totalRows) || (i % batchSize) == 0)) {
                     try {
                         Thread.sleep(Long.parseLong(
-                                propertyParser.getProperty(ConfigVars.JDBC_BATCH_COMMIT_DELAY_VAR)) * 1000);
+                                propertyParser.getProperty(ConfigVars.JDBC_BATCH_COMMIT_DELAY_KEY)) * 1000);
                     } catch (InterruptedException e) {}
                     LOG.info("Committing batch of " + batchSize + " rows");
                     statement.executeBatch();
@@ -268,7 +270,7 @@ public class Main {
                 }
             }
         } catch (SQLException e) {
-            LOG.error("ERROR: Failed to write row to : " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_VAR));
+            LOG.error("ERROR: Failed to write row to : " + propertyParser.getProperty(ConfigVars.JDBC_TABLE_KEY));
             e.printStackTrace();
         } catch (IOException e) {
             LOG.error("ERROR: Could not read test data files");

@@ -29,6 +29,11 @@ public class JsonTableParser {
     private String jsonFileName;
     private String jsonFileContents;
 
+    public JsonTableParser() {
+        this.jsonFileName = ConfigVars.DEFAULT_TABLE_DEFINITION;
+        setJsonFileContentsFromFile();
+    }
+
     public JsonTableParser(String jsonFileName) {
         this.jsonFileName = jsonFileName;
         setJsonFileContentsFromFile();

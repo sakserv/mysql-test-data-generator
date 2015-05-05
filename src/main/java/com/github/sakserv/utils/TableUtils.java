@@ -14,10 +14,9 @@
 package com.github.sakserv.utils;
 
 import com.github.sakserv.config.JsonTableParser;
-import com.github.sakserv.jdbc.Column;
-import com.github.sakserv.jdbc.Table;
+import com.github.sakserv.db.Column;
+import com.github.sakserv.db.Table;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.Iterator;
