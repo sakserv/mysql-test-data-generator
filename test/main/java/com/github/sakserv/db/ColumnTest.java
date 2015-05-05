@@ -12,9 +12,9 @@ package com.github.sakserv.db;/*
  *  limitations under the License.
  */
 
-import com.github.sakserv.db.Column;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class ColumnTest {
 

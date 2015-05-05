@@ -17,6 +17,7 @@ import com.github.sakserv.config.JsonTableParser;
 import com.github.sakserv.config.PropertyParser;
 import com.github.sakserv.db.Table;
 import com.github.sakserv.minicluster.impl.HsqldbLocalServer;
+import org.json.simple.parser.ParseException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,11 +28,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import org.json.simple.parser.ParseException;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class MySqlJdbcTest {
 

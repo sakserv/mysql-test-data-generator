@@ -22,10 +22,10 @@ import java.util.Random;
 
 public class StringFileBasedRandomValue implements RandomValue<String> {
     
-    File file;
-    Random random;
-    Column column;
-    List<String> fileContents;
+    private File file;
+    private Random random;
+    private Column column;
+    private List<String> fileContents;
     
     public  StringFileBasedRandomValue(Column column) throws IOException {
         random = new Random();
@@ -46,6 +46,10 @@ public class StringFileBasedRandomValue implements RandomValue<String> {
         while((line = reader.readLine()) != null) {
             fileContents.add(line);
         }
+    }
+
+    public List<String> getFileContents() {
+        return fileContents;
     }
     
     public String getRandomValue() {

@@ -16,9 +16,25 @@ package com.github.sakserv.datagenerator;
 import java.util.GregorianCalendar;
 
 public class StringDateRandomValue implements RandomValue<String>{
-    
-    Integer startYear = 2014;
-    Integer endYear = 2014;
+
+    private int startYear = 2013;
+    private int endYear = 2015;
+
+    public int getStartYear() {
+        return startYear;
+    }
+
+    public void setStartYear(int startYear) {
+        this.startYear = startYear;
+    }
+
+    public int getEndYear() {
+        return endYear;
+    }
+
+    public void setEndYear(int endYear) {
+        this.endYear = endYear;
+    }
 
     @Override
     public String getRandomValue() {
