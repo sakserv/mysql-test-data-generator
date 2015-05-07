@@ -18,10 +18,13 @@ import com.github.sakserv.db.Column;
 import java.util.Random;
 
 public class IntegerRandomValue implements RandomValue<Integer> {
+    Column column;
     Integer upperBound = 100;
     Integer lowerBound = 0;
 
-    public IntegerRandomValue(Column column) {}
+    public IntegerRandomValue(Column column) {
+        this.column = column;
+    }
 
     public Integer getUpperBound() {
         return upperBound;

@@ -13,12 +13,20 @@
  */
 package com.github.sakserv.datagenerator;
 
+import com.github.sakserv.db.Column;
+
 import java.util.GregorianCalendar;
 
 public class StringDateRandomValue implements RandomValue<String>{
 
+    Column column;
     private int startYear = 2013;
     private int endYear = 2015;
+
+    public StringDateRandomValue(Column column) {
+        this.column = column;
+    }
+
 
     public int getStartYear() {
         return startYear;
@@ -48,7 +56,7 @@ public class StringDateRandomValue implements RandomValue<String>{
 
     }
 
-    public static int randBetween(int start, int end) {
+    private static int randBetween(int start, int end) {
         return start + (int)Math.round(Math.random() * (end - start));
     }
 }

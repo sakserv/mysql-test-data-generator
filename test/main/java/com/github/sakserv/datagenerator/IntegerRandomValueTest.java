@@ -56,7 +56,7 @@ public class IntegerRandomValueTest {
         integerRandomValue.setLowerBound(10);
         integerRandomValue.setUpperBound(20);
         Integer randomValue = integerRandomValue.getRandomValue();
-        assertTrue(10 < randomValue && randomValue < 20);
+        assertTrue(10 <= randomValue && randomValue <= 20);
 
     }
 }
