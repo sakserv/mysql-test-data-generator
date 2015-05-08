@@ -45,6 +45,6 @@ public class IntegerRandomValue implements RandomValue<Integer> {
     @Override
     public Integer getRandomValue() {
         Random rand = new Random();
-        return rand.nextInt(((upperBound - lowerBound) + 1) + lowerBound);
+        return rand.nextInt((upperBound - lowerBound) + 1) + lowerBound;
     }
 }
