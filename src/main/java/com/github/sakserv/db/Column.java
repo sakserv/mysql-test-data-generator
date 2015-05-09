@@ -30,6 +30,7 @@ public class Column {
     private String qualifiers;
     private String datagenerator;
     private String datafile;
+    private String value;
 
     public String getName() {
         return name;
@@ -71,11 +72,19 @@ public class Column {
         this.datafile = datafile;
     }
 
-    public String generateValue() throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public void generateValue() throws ClassNotFoundException, NoSuchMethodException, InstantiationException,
     IllegalAccessException, InvocationTargetException {
         Constructor constructor = Class.forName(this.getDatagenerator()).getConstructor(new Class[]{Column.class});
         RandomValue stringFileBasedRandomValue = (RandomValue) constructor.newInstance(this);
-        return stringFileBasedRandomValue.getRandomValue().toString();
+        value = stringFileBasedRandomValue.getRandomValue().toString();
     }
 
     public String toString() {

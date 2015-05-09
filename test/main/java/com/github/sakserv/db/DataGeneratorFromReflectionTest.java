@@ -1,4 +1,5 @@
-package com.github.sakserv.db;/*
+package com.github.sakserv.db;
+/*
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -17,6 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.*;
 
 public class DataGeneratorFromReflectionTest {
 
@@ -31,7 +36,10 @@ public class DataGeneratorFromReflectionTest {
         column.setType("VARCHAR(255)");
         column.setDatagenerator("com.github.sakserv.datagenerator.StringFileBasedRandomValue");
         column.setDatafile("first-names.txt");
-        LOG.info(column.generateValue());
+        column.generateValue();
+        Pattern pattern = Pattern.compile("[A-Z]+");
+        Matcher matcher = pattern.matcher(column.getValue());
+        assertTrue(matcher.find());
     }
 
 }

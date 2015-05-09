@@ -23,6 +23,7 @@ public class ColumnTest {
     private String qualifiers = "NOT NULL AUTO_INCREMENT";
     private String datagenerator = "com.github.sakserv.datagenerator.StringFileBasedRandomValue";
     private String datafile = "school-subjects.txt";
+    private String value = "test";
 
     private Column column = new Column();
 
@@ -54,6 +55,12 @@ public class ColumnTest {
     public void testColumnDataFile() {
         column.setDatafile(datafile);
         assertEquals(datafile, column.getDatafile());
+    }
+
+    @Test
+    public void testColumnValue() {
+        column.setValue(value);
+        assertEquals(value, column.getValue());
     }
 
     @Test
