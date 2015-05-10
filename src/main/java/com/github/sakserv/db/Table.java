@@ -55,7 +55,7 @@ public class Table {
         columns.add(column);
     }
 
-    public String generateCreateTable() {
+    public String generateCreateTableStatement() {
         StringBuilder sb = new StringBuilder();
 
         // Create table statement

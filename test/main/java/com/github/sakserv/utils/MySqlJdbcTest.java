@@ -108,7 +108,7 @@ public class MySqlJdbcTest {
     public void testTables() throws SQLException {
         // Create the table
         Statement statement = connection.createStatement();
-        String sql = table.generateCreateTable();
+        String sql = table.generateCreateTableStatement();
         statement.executeQuery(sql);
         
         List<Table> tables = jdbcUtils.getTableList(connection);

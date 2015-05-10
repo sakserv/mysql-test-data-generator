@@ -14,11 +14,21 @@
 package com.github.sakserv.db;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Row {
 
     private List<Column> columns = new ArrayList<Column>();
+    private String tableName;
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
     public void addColumnToRow(Column column) {
         columns.add(column);
@@ -27,4 +37,30 @@ public class Row {
     public List<Column> getColumns() {
         return columns;
     }
+
+    public String generateRowInsertStatement() {
+        StringBuffer sbCols = new StringBuffer();
+        StringBuffer sbVals = new StringBuffer();
+
+        Iterator it = columns.iterator();
+
+        while (it.hasNext()) {
+            Column column = (Column) it.next();
+            sbCols.append(column.getName());
+            sbVals.append(column.getValue());
+            if (it.hasNext()) {
+                sbCols.append(", ");
+                sbVals.append(", ");
+            }
+        }
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("INSERT INTO " + tableName + " (");
+        sb.append(sbCols.toString() + ")");
+        sb.append(" VALUES (");
+        sb.append(sbVals.toString() + ")");
+        return sb.toString();
+
+    }
+
 }
