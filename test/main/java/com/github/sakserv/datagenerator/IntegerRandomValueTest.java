@@ -3,6 +3,8 @@ package com.github.sakserv.datagenerator;
 import com.github.sakserv.db.Column;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -22,6 +24,9 @@ import static org.junit.Assert.*;
  *  limitations under the License.
  */
 public class IntegerRandomValueTest {
+
+    // Logger
+    private static final Logger LOG = LoggerFactory.getLogger(IntegerRandomValueTest.class);
 
     private static Column column;
     private static final String COL_NAME = "id";

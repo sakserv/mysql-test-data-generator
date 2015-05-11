@@ -13,10 +13,15 @@ package com.github.sakserv.db;/*
  */
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 
 public class ColumnTest {
+
+    // Logger
+    private static final Logger LOG = LoggerFactory.getLogger(ColumnTest.class);
 
     private String name = "test_table";
     private String type = "STRING";

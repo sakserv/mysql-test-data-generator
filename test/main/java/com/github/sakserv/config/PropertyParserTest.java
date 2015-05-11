@@ -15,12 +15,17 @@ package com.github.sakserv.config;/*
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
 public class PropertyParserTest {
+
+    // Logger
+    private static final Logger LOG = LoggerFactory.getLogger(PropertyParserTest.class);
 
     private PropertyParser propertyParser = new PropertyParser();
     private String propFileName = "default.properties";

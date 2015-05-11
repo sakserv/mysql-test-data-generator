@@ -17,11 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Table {
-    
+    private String databaseName;
     private String tableName;
     List<Row> rows = new ArrayList<Row>();
     List<Column> columns = new ArrayList<Column>();
     private String primaryKey;
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
 
     public String getTableName() {
         return tableName;

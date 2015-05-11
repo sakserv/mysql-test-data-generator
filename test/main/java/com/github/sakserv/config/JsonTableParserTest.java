@@ -16,10 +16,15 @@ import org.json.simple.parser.ParseException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 
 public class JsonTableParserTest {
+
+    // Logger
+    private static final Logger LOG = LoggerFactory.getLogger(JsonTableParserTest.class);
 
     private String jsonFileName = "tabledef.json";
 
