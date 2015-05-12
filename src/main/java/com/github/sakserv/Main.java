@@ -16,6 +16,7 @@ package com.github.sakserv;
 import com.github.sakserv.config.ConfigVars;
 import com.github.sakserv.config.PropertyParser;
 import com.github.sakserv.utils.JdbcUtils;
+import com.github.sakserv.utils.CmdLineUtils;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +36,23 @@ public class Main {
     private static JdbcUtils jdbcUtils = new JdbcUtils();
     private static Connection connection;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
         
         // Parse the cmdline args and property file
-        parseCmdLineAndProps(args);
+        propertyParser = CmdLineUtils.parseCmdLineAndProps(args, propertyParser);
         
         // Get a JDBC connection, without the database
-        Connection connection = getConnectionNoDb();
+        String connectionString = JdbcUtils.getConnectionString(
+                propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY));
+        connection = JdbcUtils.getConnection(connectionString,
+                propertyParser.getProperty(ConfigVars.JDBC_USER_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_KEY));
                 
         // Create the grants
         if(!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_SKIP_GRANTS_KEY))) {
-            createGrants(connection);
+            JdbcUtils.createGrants(connection);
         }
 
         // Create the database, if required
@@ -66,25 +73,7 @@ public class Main {
         
     }
     
-    private static void displayQueryDebug(String sql) {
-        LOG.info("DEBUG: Running (or batching) the following statement: " + sql);
-    }
-    
-    private static String getNoDbConnString() {
-        return propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY) +
-                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY) + ":" +
-                propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY);
-    }
-    
-    private static String getConnString() {
-        return propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY) +
-                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY) + ":" +
-                propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY) + "/" +
-                propertyParser.getProperty(ConfigVars.JDBC_DATABASE_KEY);
-        
-    }
-    
-    private static Connection getConnectionNoDb() {
+/*    private static Connection getConnectionNoDb() {
         // Establish the connection, without the db
         String noDbConnString = getNoDbConnString();
         LOG.info("Establishing connection to: " + noDbConnString);
@@ -130,66 +119,10 @@ public class Main {
         }
         return connection;
         
-    }
+    }*/
+
     
-    private static void parseCmdLineAndProps(String[] args) throws IOException {
-        // Arg parsing for input props file
-        Options options = new Options();
-        options.addOption("c", true, "configuration file");
-
-        CommandLineParser parser = new BasicParser();
-        CommandLine cmd;
-        String propertyFileName = "";
-        try {
-            cmd = parser.parse(options, args);
-
-            // Load the props file
-            if(cmd.hasOption("c")) {
-                propertyFileName = cmd.getOptionValue("c");
-            } else {
-                propertyFileName = ConfigVars.DEFAULT_PROPS_FILE;
-            }
-        } catch(ParseException e) {
-            LOG.error("ERROR: Failed to parse commandline args!");
-            e.printStackTrace();
-        }
-        LOG.info("Loading and parsing the property file: " + new File(propertyFileName).getAbsolutePath());
-        propertyParser.setPropFileName(propertyFileName);
-        propertyParser.parsePropsFile();
-        
-    }
-    
-    private static void createGrants(Connection connection) {
-        
-        // Create the grants
-        try {
-            LOG.info("Running grants for user " + propertyParser.getProperty(ConfigVars.JDBC_USER_KEY) +
-                    " on " + getNoDbConnString());
-            Statement statement = connection.createStatement();
-            String sqlGrantPw = "GRANT ALL PRIVILEGES ON *.* TO " +
-                    "\"" + propertyParser.getProperty(ConfigVars.JDBC_USER_KEY) + "\"@" +
-                    "\"%\" IDENTIFIED BY \"" + propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_KEY) + "\"";
-            displayQueryDebug(sqlGrantPw);
-            statement.executeQuery(sqlGrantPw);
-            
-            /*statement = connection.createStatement();
-            String sqlGrantSandbox = "GRANT ALL ON *.* to root@mysql.sandbox WITH GRANT OPTION";
-            displayQueryDebug(sqlGrantSandbox);
-            statement.executeQuery(sqlGrantSandbox);*/
-
-            statement = connection.createStatement();
-            String sqlFlushPriv = "FLUSH PRIVILEGES";
-            displayQueryDebug(sqlFlushPriv);
-            statement.executeQuery(sqlFlushPriv);
-
-        } catch (SQLException e) {
-            LOG.error("ERROR: Error applying grants for user: " + propertyParser.getProperty(ConfigVars.JDBC_USER_KEY));
-            e.printStackTrace();
-        }
-        
-    }
-    
-    private static void createDatabase(Connection connection) {
+/*    private static void createDatabase(Connection connection) {
         // Create the database
         if (!Boolean.parseBoolean(propertyParser.getProperty(ConfigVars.JDBC_SKIP_DATABASE_CREATE_KEY))) {
             try {
@@ -235,7 +168,7 @@ public class Main {
                         " with " + propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_KEY) + " records."
         );
         
-    }
+    }*/
     
 /*    private static void populateTable(Connection connection) {
         Integer totalRows = Integer.parseInt(propertyParser.getProperty(ConfigVars.JDBC_NUM_ROWS_KEY));

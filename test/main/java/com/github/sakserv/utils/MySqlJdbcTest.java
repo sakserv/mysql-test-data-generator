@@ -72,7 +72,7 @@ public class MySqlJdbcTest {
         
         jdbcUtils = new JdbcUtils();
         jdbcUtils.loadJdbcDriver(propertyParser.getProperty(ConfigVars.JDBC_DRIVER_NAME_KEY));
-        
+
         connection = jdbcUtils.getConnection(
                 propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY),
                 propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY),
@@ -85,12 +85,28 @@ public class MySqlJdbcTest {
 
         JsonTableParser jsonTableParser = new JsonTableParser(ConfigVars.DEFAULT_TABLE_DEFINITION);
         table = tableUtils.createTableObjFromJsonString(jsonTableParser.getJsonFileContents());
+
     }
-    
+
     @AfterClass
     public static void tearDown() throws SQLException {
         connection.close();
         hsqldbLocalServer.stop();
+    }
+
+    @Test
+    public void testConnectionNoDb() throws Exception {
+        connection = jdbcUtils.getConnection(
+                propertyParser.getProperty(ConfigVars.JDBC_CONNECTION_STRING_PREFIX_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_HOSTNAME_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_PORT_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_USER_KEY),
+                propertyParser.getProperty(ConfigVars.JDBC_PASSWORD_KEY)
+        );
+        setCompatibilityMode();
+
+        JsonTableParser jsonTableParser = new JsonTableParser(ConfigVars.DEFAULT_TABLE_DEFINITION);
+        table = tableUtils.createTableObjFromJsonString(jsonTableParser.getJsonFileContents());
     }
     
     @Test

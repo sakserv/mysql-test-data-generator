@@ -13,6 +13,7 @@
  */
 package com.github.sakserv.utils;
 
+import com.github.sakserv.config.ConfigVars;
 import com.github.sakserv.db.Table;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,20 +33,8 @@ public class JdbcUtils {
         Class.forName(jdbcDriverClass).newInstance();
     }
 
-    public Connection getConnection(String connectionStringPrefix, String hostName,
-                                        String port, String userName,
-                                        String password) throws SQLException {
-        Connection connection = DriverManager.getConnection(connectionStringPrefix + hostName + ":"
-                + port + "/", userName, password);
-        return connection;
-    }
-
-    public Connection getConnection(String connectionStringPrefix, String hostName,
-                                    String port, String userName, String password,
-                                    String databaseName) throws SQLException {
-        Connection connection = DriverManager.getConnection(connectionStringPrefix + hostName + ":"
-                + port + "/" + databaseName, userName, password);
-        return connection;
+    public static Connection getConnection(String connectionString, String userName, String password) throws SQLException {
+        return DriverManager.getConnection(connectionString, userName, password);
     }
 
     public List<Table> getTableList(Connection connection) throws SQLException {
@@ -60,6 +49,48 @@ public class JdbcUtils {
         }
         return tableList;
 
+    }
+
+    public static String getConnectionString(String connectionStringPrefix, String hostname, String port) {
+        return connectionStringPrefix + hostname + ":" + port;
+    }
+
+    public static String getConnectionString(String connectionStringPrefix, String hostname, String port, String database) {
+        return connectionStringPrefix + hostname + ":" + port + "/" + database;
+    }
+
+    public static void createGrants(Connection connection, String connectionString, String userName, String passWord) {
+
+        // Create the grants
+        try {
+            LOG.info("Running grants for user " + userName +
+                    " on " + connectionString);
+            Statement statement = connection.createStatement();
+            String sqlGrantPw = "GRANT ALL PRIVILEGES ON *.* TO " +
+                    "\"" + userName + "\"@" +
+                    "\"%\" IDENTIFIED BY \"" + passWord + "\"";
+            displayQueryDebug(sqlGrantPw);
+            statement.executeQuery(sqlGrantPw);
+
+            /*statement = connection.createStatement();
+            String sqlGrantSandbox = "GRANT ALL ON *.* to root@mysql.sandbox WITH GRANT OPTION";
+            displayQueryDebug(sqlGrantSandbox);
+            statement.executeQuery(sqlGrantSandbox);*/
+
+            statement = connection.createStatement();
+            String sqlFlushPriv = "FLUSH PRIVILEGES";
+            displayQueryDebug(sqlFlushPriv);
+            statement.executeQuery(sqlFlushPriv);
+
+        } catch (SQLException e) {
+            LOG.error("ERROR: Error applying grants for user: " + userName);
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void displayQueryDebug(String sql) {
+        LOG.info("DEBUG: Running (or batching) the following statement: " + sql);
     }
 
 }
